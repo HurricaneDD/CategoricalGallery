@@ -1,4 +1,5 @@
 # Categorical Gallery - 分类相册
+[点击下载APK文件](hurricanedd.github.io/CategoricalGallery/app/build/outputs/apk/debug/app-debug.apk)
 
 ## 一句话介绍
 与系统相册独立的一个照片管理器，支持将若干相册分配到不同工作区，便于管理照片和相册。
