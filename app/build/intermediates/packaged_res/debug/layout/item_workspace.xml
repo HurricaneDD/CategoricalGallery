@@ -10,7 +10,8 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:cardCornerRadius="8dp"
-        app:cardElevation="2dp"
+        app:cardElevation="0dp"
+        app:cardBackgroundColor="@android:color/transparent"
         app:layout_constraintDimensionRatio="1:1"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -26,6 +27,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_weight="1"
+                android:layout_marginBottom="1dp"
                 android:orientation="horizontal">
 
                 <ImageView
@@ -33,6 +35,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_marginEnd="1dp"
                     android:scaleType="centerCrop" />
 
                 <ImageView
@@ -55,6 +58,7 @@
                     android:layout_width="0dp"
                     android:layout_height="match_parent"
                     android:layout_weight="1"
+                    android:layout_marginEnd="1dp"
                     android:scaleType="centerCrop" />
 
                 <ImageView
@@ -82,9 +86,41 @@
                 android:layout_height="wrap_content"
                 android:text="@string/empty_text"
                 android:textColor="@color/colorEmptyText"
-                android:textSize="28sp" />
+                android:textSize="56sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/ivAdd"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/colorPrimary"
+            android:scaleType="centerCrop"
+            android:src="@drawable/ic_add"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/viewBorder"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
+
+        <View
+            android:id="@+id/viewSelectionOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/ivSelection"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="6dp"
+            android:src="@drawable/ic_multi_unchecked"
+            android:visibility="gone" />
 
     </androidx.cardview.widget.CardView>
 

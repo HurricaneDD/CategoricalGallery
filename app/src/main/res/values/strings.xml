@@ -3,13 +3,20 @@
     <string name="app_name">分类相册</string>
 
     <!-- Workspace Selection -->
-    <string name="toolbar_workspace">工作区</string>
+    <string name="toolbar_workspace">我的工作区</string>
     <string name="default_workspace_name">暂未归入</string>
     <string name="empty_text">空</string>
 
     <!-- Dialogs -->
     <string name="dialog_create_workspace_title">创建新的工作区</string>
     <string name="dialog_rename_workspace_title">重命名该工作区</string>
+    <string name="dialog_rename_album_title">重命名该相册</string>
+    <string name="dialog_rename_photo_title">重命名该图片</string>
+    <string name="rename_photo_success">重命名成功</string>
+    <string name="rename_photo_failed">重命名失败，名称可能已存在</string>
+    <string name="rename_album_failed">重命名失败，名称可能已存在</string>
+    <string name="create_new_workspace">创建新工作区</string>
+    <string name="click_to_rename">点击重命名</string>
     <string name="dialog_create_album_title">创建新相册</string>
     <string name="dialog_create_album_hint">请输入相册名</string>
     <string name="dialog_input_hint_no_space">不允许出现空格</string>

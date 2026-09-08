@@ -3,10 +3,13 @@ package com.categorical.gallery;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -15,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
 import androidx.exifinterface.media.ExifInterface;
 import androidx.recyclerview.widget.RecyclerView;
@@ -91,6 +95,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         btnMultiView.setOnClickListener(v -> openPhotoSelect());
         btnInfo.setOnClickListener(v -> showDetailsDialog());
         btnPin.setOnClickListener(v -> togglePin());
+        tvPhotoName.setOnClickListener(v -> showRenameDialog());
     }
 
     private void loadPhotos() {
@@ -299,6 +304,89 @@ public class ImageViewerActivity extends AppCompatActivity {
                 .setView(view)
                 .create();
         btnConfirm.setOnClickListener(v -> dialog.dismiss());
+        Button btnRename = view.findViewById(R.id.btn_detail_rename);
+        btnRename.setOnClickListener(v -> {
+            dialog.dismiss();
+            showRenameDialog();
+        });
+        dialog.show();
+    }
+
+    // ==================== Action: Rename ====================
+
+    private void showRenameDialog() {
+        Photo photo = getCurrentPhoto();
+        if (photo == null) {
+            return;
+        }
+        String oldName = photo.getName();
+        int dotIndex = oldName.lastIndexOf('.');
+        String nameWithoutExt = dotIndex > 0 ? oldName.substring(0, dotIndex) : oldName;
+        String extension = dotIndex > 0 ? oldName.substring(dotIndex) : "";
+
+        View view = LayoutInflater.from(this).inflate(R.layout.dialog_rename_workspace, null);
+        TextView tvTitle = view.findViewById(R.id.tvTitle);
+        TextView tvOriginalName = view.findViewById(R.id.tvOriginalName);
+        EditText etName = view.findViewById(R.id.etWorkspaceName);
+        Button btnCancel = view.findViewById(R.id.btnCancel);
+        Button btnConfirm = view.findViewById(R.id.btnConfirm);
+
+        tvTitle.setText(R.string.dialog_rename_photo_title);
+        tvOriginalName.setText(getString(R.string.dialog_original_name, oldName));
+
+        AlertDialog dialog = new AlertDialog.Builder(this)
+                .setView(view)
+                .create();
+
+        etName.setText(nameWithoutExt);
+        etName.setSelection(nameWithoutExt.length());
+
+        btnConfirm.setEnabled(false);
+        btnConfirm.setTextColor(ContextCompat.getColor(this, R.color.colorButtonDisabled));
+
+        etName.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = s.toString().trim();
+                boolean valid = !text.isEmpty()
+                        && !text.contains(" ")
+                        && !text.equals(nameWithoutExt);
+                btnConfirm.setEnabled(valid);
+                btnConfirm.setTextColor(ContextCompat.getColor(ImageViewerActivity.this,
+                        valid ? R.color.colorPrimary : R.color.colorButtonDisabled));
+            }
+        });
+
+        btnCancel.setOnClickListener(v -> dialog.dismiss());
+
+        btnConfirm.setOnClickListener(v -> {
+            String newName = etName.getText().toString().trim() + extension;
+            if (newName.equals(oldName)) {
+                return;
+            }
+            File oldFile = photo.getFile();
+            File newFile = new File(oldFile.getParentFile(), newName);
+            boolean success = FileUtils.renamePhoto(this, oldFile, newFile);
+            if (success) {
+                photo.setFile(newFile);
+                photo.setName(newName);
+                adapter.notifyItemChanged(currentPosition);
+                updateTopBar();
+                Toast.makeText(this, R.string.rename_photo_success, Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            } else {
+                Toast.makeText(this, R.string.rename_photo_failed, Toast.LENGTH_SHORT).show();
+            }
+        });
+
         dialog.show();
     }
 

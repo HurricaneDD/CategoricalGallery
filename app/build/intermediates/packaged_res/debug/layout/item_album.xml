@@ -29,6 +29,23 @@
             android:text="@string/empty_text"
             android:textColor="@color/colorEmptyText"
             android:textSize="24sp" />
+
+        <View
+            android:id="@+id/viewSelectionOverlay"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#80000000"
+            android:visibility="gone" />
+
+        <ImageView
+            android:id="@+id/ivSelection"
+            android:layout_width="28dp"
+            android:layout_height="28dp"
+            android:layout_gravity="top|end"
+            android:layout_margin="6dp"
+            android:src="@drawable/ic_multi_unchecked"
+            android:visibility="gone" />
+
     </FrameLayout>
 
     <TextView

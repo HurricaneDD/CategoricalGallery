@@ -15,7 +15,7 @@
     <color name="colorSurface">#FFFFFFFF</color>
     <color name="colorTextPrimary">#FF212121</color>
     <color name="colorTextSecondary">#FF757575</color>
-    <color name="colorDivider">#FFBDBDBD</color>
+    <color name="colorDivider">#FF999999</color>
     <color name="colorEmptyBg">#FFE0E0E0</color>
     <color name="colorEmptyText">#FF9E9E9E</color>
     <color name="colorRed">#FFD32F2F</color>
@@ -25,4 +25,17 @@
     <color name="colorPinBg">#FFFFD54F</color>
     <color name="colorButtonDisabled">#FFBDBDBD</color>
     <color name="colorButtonNormal">#FF1976D2</color>
+    <color name="colorImageViewerBg">#FFFFFFFF</color>
+
+    <!-- Theme colors -->
+    <color name="themeBluePrimary">#FF1976D2</color>
+    <color name="themeBlueDark">#FF0D47A1</color>
+    <color name="themePurplePrimary">#FF7B1FA2</color>
+    <color name="themePurpleDark">#FF4A148C</color>
+    <color name="themeGreenPrimary">#FF388E3C</color>
+    <color name="themeGreenDark">#FF1B5E20</color>
+    <color name="themeRedPrimary">#FFD32F2F</color>
+    <color name="themeRedDark">#FFB71C1C</color>
+    <color name="themeBWPrimary">#FF424242</color>
+    <color name="themeBWDark">#FF212121</color>
 </resources>

@@ -1,220 +1,228 @@
 1<?xml version="1.0" encoding="utf-8"?>
 2<manifest xmlns:android="http://schemas.android.com/apk/res/android"
 3    package="com.categorical.gallery"
-4    android:versionCode="1"
-5    android:versionName="1.0" >
+4    android:versionCode="2"
+5    android:versionName="1.1" >
 6
 7    <uses-sdk
 8        android:minSdkVersion="24"
 9        android:targetSdkVersion="34" />
 10
 11    <uses-permission
-11-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:5:5-6:38
+11-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:5:5-6:38
 12        android:name="android.permission.READ_EXTERNAL_STORAGE"
-12-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:5:22-77
+12-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:5:22-77
 13        android:maxSdkVersion="32" />
-13-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:6:9-35
+13-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:6:9-35
 14    <uses-permission
-14-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:7:5-8:38
+14-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:7:5-8:38
 15        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-15-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:7:22-78
+15-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:7:22-78
 16        android:maxSdkVersion="29" />
-16-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:8:9-35
+16-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:8:9-35
 17    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
-17-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:9:5-76
-17-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:9:22-73
+17-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:9:5-76
+17-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:9:22-73
 18    <uses-permission android:name="android.permission.ACCESS_MEDIA_LOCATION" />
-18-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:10:5-80
-18-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:10:22-77
+18-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:10:5-80
+18-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:10:22-77
 19
 20    <permission
-20-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\58965ab1a2bf12ef28df7731ee942225\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
+20-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\cf89ab1ea7cc19352d4f47103c74320d\transformed\core-1.9.0\AndroidManifest.xml:22:5-24:47
 21        android:name="com.categorical.gallery.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION"
-21-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\58965ab1a2bf12ef28df7731ee942225\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
+21-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\cf89ab1ea7cc19352d4f47103c74320d\transformed\core-1.9.0\AndroidManifest.xml:23:9-81
 22        android:protectionLevel="signature" />
-22-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\58965ab1a2bf12ef28df7731ee942225\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
+22-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\cf89ab1ea7cc19352d4f47103c74320d\transformed\core-1.9.0\AndroidManifest.xml:24:9-44
 23
 24    <uses-permission android:name="com.categorical.gallery.DYNAMIC_RECEIVER_NOT_EXPORTED_PERMISSION" />
-24-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\58965ab1a2bf12ef28df7731ee942225\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
-24-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\58965ab1a2bf12ef28df7731ee942225\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
+24-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\cf89ab1ea7cc19352d4f47103c74320d\transformed\core-1.9.0\AndroidManifest.xml:26:5-97
+24-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\cf89ab1ea7cc19352d4f47103c74320d\transformed\core-1.9.0\AndroidManifest.xml:26:22-94
 25
 26    <application
-26-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:12:5-76:19
+26-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:12:5-81:19
 27        android:allowBackup="true"
-27-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:13:9-35
+27-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:13:9-35
 28        android:appComponentFactory="androidx.core.app.CoreComponentFactory"
-28-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\58965ab1a2bf12ef28df7731ee942225\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
+28-->[androidx.core:core:1.9.0] C:\Users\Hurricane\.gradle\caches\transforms-3\cf89ab1ea7cc19352d4f47103c74320d\transformed\core-1.9.0\AndroidManifest.xml:28:18-86
 29        android:debuggable="true"
 30        android:extractNativeLibs="false"
 31        android:icon="@mipmap/ic_launcher"
-31-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:14:9-43
+31-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:14:9-43
 32        android:label="@string/app_name"
-32-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:15:9-41
+32-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:15:9-41
 33        android:requestLegacyExternalStorage="true"
-33-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:19:9-52
+33-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:19:9-52
 34        android:roundIcon="@mipmap/ic_launcher_round"
-34-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:16:9-54
+34-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:16:9-54
 35        android:supportsRtl="true"
-35-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:17:9-35
+35-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:17:9-35
 36        android:theme="@style/Theme.CategoricalGallery" >
-36-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:18:9-56
+36-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:18:9-56
 37        <activity
-37-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:22:9-30:20
+37-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:22:9-30:20
 38            android:name="com.categorical.gallery.MainActivity"
-38-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:23:13-41
+38-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:23:13-41
 39            android:exported="true"
-39-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:24:13-36
+39-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:24:13-36
 40            android:screenOrientation="portrait" >
-40-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:25:13-49
+40-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:25:13-49
 41            <intent-filter>
-41-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:26:13-29:29
+41-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:26:13-29:29
 42                <action android:name="android.intent.action.MAIN" />
-42-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:27:17-69
-42-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:27:25-66
+42-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:27:17-69
+42-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:27:25-66
 43
 44                <category android:name="android.intent.category.LAUNCHER" />
-44-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:28:17-77
-44-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:28:27-74
+44-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:28:17-77
+44-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:28:27-74
 45            </intent-filter>
 46        </activity>
 47        <activity
-47-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:32:9-35:40
+47-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:32:9-35:40
 48            android:name="com.categorical.gallery.WorkspaceActivity"
-48-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:33:13-46
+48-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:33:13-46
 49            android:exported="false"
-49-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:35:13-37
+49-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:35:13-37
 50            android:screenOrientation="portrait" />
-50-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:34:13-49
+50-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:34:13-49
 51        <activity
-51-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:37:9-40:40
+51-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:37:9-40:40
 52            android:name="com.categorical.gallery.AlbumActivity"
-52-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:38:13-42
+52-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:38:13-42
 53            android:exported="false"
-53-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:40:13-37
+53-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:40:13-37
 54            android:screenOrientation="portrait" />
-54-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:39:13-49
+54-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:39:13-49
 55        <activity
-55-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:42:9-45:40
+55-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:42:9-45:40
 56            android:name="com.categorical.gallery.ImageViewerActivity"
-56-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:43:13-48
+56-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:43:13-48
 57            android:exported="false"
-57-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:45:13-37
+57-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:45:13-37
 58            android:screenOrientation="portrait" />
-58-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:44:13-49
+58-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:44:13-49
 59        <activity
-59-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:47:9-50:40
+59-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:47:9-50:40
 60            android:name="com.categorical.gallery.ImportActivity"
-60-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:48:13-43
+60-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:48:13-43
 61            android:exported="false"
-61-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:50:13-37
+61-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:50:13-37
 62            android:screenOrientation="portrait" />
-62-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:49:13-49
+62-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:49:13-49
 63        <activity
-63-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:52:9-55:40
+63-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:52:9-55:40
 64            android:name="com.categorical.gallery.ExportActivity"
-64-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:53:13-43
+64-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:53:13-43
 65            android:exported="false"
-65-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:55:13-37
+65-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:55:13-37
 66            android:screenOrientation="portrait" />
-66-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:54:13-49
+66-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:54:13-49
 67        <activity
-67-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:57:9-60:40
+67-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:57:9-60:40
 68            android:name="com.categorical.gallery.MultiImageActivity"
-68-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:58:13-47
+68-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:58:13-47
 69            android:exported="false"
-69-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:60:13-37
+69-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:60:13-37
 70            android:screenOrientation="portrait" />
-70-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:59:13-49
+70-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:59:13-49
 71        <activity
-71-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:62:9-65:40
+71-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:62:9-65:40
 72            android:name="com.categorical.gallery.PhotoSelectActivity"
-72-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:63:13-48
+72-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:63:13-48
 73            android:exported="false"
-73-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:65:13-37
+73-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:65:13-37
 74            android:screenOrientation="portrait" />
-74-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:64:13-49
-75
-76        <provider
-77            android:name="androidx.core.content.FileProvider"
-77-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:68:13-62
-78            android:authorities="com.categorical.gallery.fileprovider"
-78-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:69:13-64
-79            android:exported="false"
-79-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:70:13-37
-80            android:grantUriPermissions="true" >
-80-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:71:13-47
-81            <meta-data
-81-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:72:13-74:54
-82                android:name="android.support.FILE_PROVIDER_PATHS"
-82-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:73:17-67
-83                android:resource="@xml/file_paths" />
-83-->D:\ai\github\CategoricalGallery_SOLO\app\src\main\AndroidManifest.xml:74:17-51
-84        </provider>
-85        <provider
-85-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\73898d6b9e4b9aa792280f8586ec2357\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
-86            android:name="androidx.startup.InitializationProvider"
-86-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\73898d6b9e4b9aa792280f8586ec2357\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
-87            android:authorities="com.categorical.gallery.androidx-startup"
-87-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\73898d6b9e4b9aa792280f8586ec2357\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
-88            android:exported="false" >
-88-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\73898d6b9e4b9aa792280f8586ec2357\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
-89            <meta-data
-89-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\73898d6b9e4b9aa792280f8586ec2357\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
-90                android:name="androidx.emoji2.text.EmojiCompatInitializer"
-90-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\73898d6b9e4b9aa792280f8586ec2357\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
-91                android:value="androidx.startup" />
-91-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\73898d6b9e4b9aa792280f8586ec2357\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
-92            <meta-data
-92-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Hurricane\.gradle\caches\transforms-3\810b53b661f4eaba45feceed81c93484\transformed\lifecycle-process-2.6.1\AndroidManifest.xml:29:13-31:52
-93                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
-93-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Hurricane\.gradle\caches\transforms-3\810b53b661f4eaba45feceed81c93484\transformed\lifecycle-process-2.6.1\AndroidManifest.xml:30:17-78
-94                android:value="androidx.startup" />
-94-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Hurricane\.gradle\caches\transforms-3\810b53b661f4eaba45feceed81c93484\transformed\lifecycle-process-2.6.1\AndroidManifest.xml:31:17-49
-95            <meta-data
-95-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
-96                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
-96-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
-97                android:value="androidx.startup" />
-97-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
-98        </provider>
-99
-100        <receiver
-100-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
-101            android:name="androidx.profileinstaller.ProfileInstallReceiver"
-101-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
-102            android:directBootAware="false"
-102-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
-103            android:enabled="true"
-103-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
-104            android:exported="true"
-104-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
-105            android:permission="android.permission.DUMP" >
-105-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
-106            <intent-filter>
-106-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
-107                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
-107-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
-107-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
-108            </intent-filter>
-109            <intent-filter>
-109-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
-110                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
-110-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
-110-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
-111            </intent-filter>
-112            <intent-filter>
-112-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
-113                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
-113-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
-113-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
-114            </intent-filter>
-115            <intent-filter>
-115-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
-116                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
-116-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
-116-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\edae28cfbb9b762dca1be9172c1f1cbe\transformed\profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
-117            </intent-filter>
-118        </receiver>
-119    </application>
-120
-121</manifest>
+74-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:64:13-49
+75        <activity
+75-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:67:9-70:40
+76            android:name="com.categorical.gallery.SettingsActivity"
+76-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:68:13-45
+77            android:exported="false"
+77-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:70:13-37
+78            android:screenOrientation="portrait" />
+78-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:69:13-49
+79
+80        <provider
+81            android:name="androidx.core.content.FileProvider"
+81-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:73:13-62
+82            android:authorities="com.categorical.gallery.fileprovider"
+82-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:74:13-64
+83            android:exported="false"
+83-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:75:13-37
+84            android:grantUriPermissions="true" >
+84-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:76:13-47
+85            <meta-data
+85-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:77:13-79:54
+86                android:name="android.support.FILE_PROVIDER_PATHS"
+86-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:78:17-67
+87                android:resource="@xml/file_paths" />
+87-->D:\ai\github\CategoricalGallery\app\src\main\AndroidManifest.xml:79:17-51
+88        </provider>
+89        <provider
+89-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\1b9996c08011e841824064a663be72df\transformed\emoji2-1.2.0\AndroidManifest.xml:24:9-32:20
+90            android:name="androidx.startup.InitializationProvider"
+90-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\1b9996c08011e841824064a663be72df\transformed\emoji2-1.2.0\AndroidManifest.xml:25:13-67
+91            android:authorities="com.categorical.gallery.androidx-startup"
+91-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\1b9996c08011e841824064a663be72df\transformed\emoji2-1.2.0\AndroidManifest.xml:26:13-68
+92            android:exported="false" >
+92-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\1b9996c08011e841824064a663be72df\transformed\emoji2-1.2.0\AndroidManifest.xml:27:13-37
+93            <meta-data
+93-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\1b9996c08011e841824064a663be72df\transformed\emoji2-1.2.0\AndroidManifest.xml:29:13-31:52
+94                android:name="androidx.emoji2.text.EmojiCompatInitializer"
+94-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\1b9996c08011e841824064a663be72df\transformed\emoji2-1.2.0\AndroidManifest.xml:30:17-75
+95                android:value="androidx.startup" />
+95-->[androidx.emoji2:emoji2:1.2.0] C:\Users\Hurricane\.gradle\caches\transforms-3\1b9996c08011e841824064a663be72df\transformed\emoji2-1.2.0\AndroidManifest.xml:31:17-49
+96            <meta-data
+96-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Hurricane\.gradle\caches\transforms-3\914a02d4ef33b4a2d3f9bc481d83e7fc\transformed\lifecycle-process-2.6.1\AndroidManifest.xml:29:13-31:52
+97                android:name="androidx.lifecycle.ProcessLifecycleInitializer"
+97-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Hurricane\.gradle\caches\transforms-3\914a02d4ef33b4a2d3f9bc481d83e7fc\transformed\lifecycle-process-2.6.1\AndroidManifest.xml:30:17-78
+98                android:value="androidx.startup" />
+98-->[androidx.lifecycle:lifecycle-process:2.6.1] C:\Users\Hurricane\.gradle\caches\transforms-3\914a02d4ef33b4a2d3f9bc481d83e7fc\transformed\lifecycle-process-2.6.1\AndroidManifest.xml:31:17-49
+99            <meta-data
+99-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:29:13-31:52
+100                android:name="androidx.profileinstaller.ProfileInstallerInitializer"
+100-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:30:17-85
+101                android:value="androidx.startup" />
+101-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:31:17-49
+102        </provider>
+103
+104        <receiver
+104-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:34:9-52:20
+105            android:name="androidx.profileinstaller.ProfileInstallReceiver"
+105-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:35:13-76
+106            android:directBootAware="false"
+106-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:36:13-44
+107            android:enabled="true"
+107-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:37:13-35
+108            android:exported="true"
+108-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:38:13-36
+109            android:permission="android.permission.DUMP" >
+109-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:39:13-57
+110            <intent-filter>
+110-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:40:13-42:29
+111                <action android:name="androidx.profileinstaller.action.INSTALL_PROFILE" />
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:41:17-91
+111-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:41:25-88
+112            </intent-filter>
+113            <intent-filter>
+113-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:43:13-45:29
+114                <action android:name="androidx.profileinstaller.action.SKIP_FILE" />
+114-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:44:17-85
+114-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:44:25-82
+115            </intent-filter>
+116            <intent-filter>
+116-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:46:13-48:29
+117                <action android:name="androidx.profileinstaller.action.SAVE_PROFILE" />
+117-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:47:17-88
+117-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:47:25-85
+118            </intent-filter>
+119            <intent-filter>
+119-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:49:13-51:29
+120                <action android:name="androidx.profileinstaller.action.BENCHMARK_OPERATION" />
+120-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:50:17-95
+120-->[androidx.profileinstaller:profileinstaller:1.3.0] C:\Users\Hurricane\.gradle\caches\transforms-3\ffb0329a3fb69eb4cdd5ec3d8e97f80d\transformed\profileinstaller-1.3.0\AndroidManifest.xml:50:25-92
+121            </intent-filter>
+122        </receiver>
+123    </application>
+124
+125</manifest>

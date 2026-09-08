@@ -4,8 +4,116 @@
         "source": "com.categorical.gallery.app-main-35:/drawable/ic_folder.xml"
     },
     {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_sort.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_sort.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_bg_album_selected.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/bg_album_selected.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_edit.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_edit.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_import.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_import.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_settings.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_settings.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_import.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/activity_import.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_bg_pin_circle.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/bg_pin_circle.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_share.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_share.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_launcher.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_launcher.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_multi_view.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_multi_view.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_back.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_back.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_add.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_add.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_bg_album_normal.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/bg_album_normal.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_album.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/item_album.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_launcher_round.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_launcher_round.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_album.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/activity_album.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_delete.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_delete.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_multi_unchecked.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_multi_unchecked.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_pin.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_pin.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_settings.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/activity_settings.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_multi_checked.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/ic_multi_checked.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_dialog_rename_workspace.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/dialog_rename_workspace.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_photo.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/item_photo.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_multi_image.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/activity_multi_image.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_photo_select.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/activity_photo_select.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_select_folder.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/item_select_folder.xml"
+    },
+    {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_image_viewer.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/layout/activity_image_viewer.xml"
+    },
+    {
+        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_bg_color_circle.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/drawable/bg_color_circle.xml"
     },
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_export.xml.flat",
@@ -28,84 +136,32 @@
         "source": "com.categorical.gallery.app-main-35:/layout/dialog_create_album.xml"
     },
     {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_bg_album_selected.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/bg_album_selected.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_import.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_import.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_import.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/activity_import.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_bg_pin_circle.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/bg_pin_circle.xml"
-    },
-    {
         "merged": "com.categorical.gallery.app-merged_res-33:/mipmap-anydpi-v26_ic_launcher_round.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/mipmap-anydpi-v26/ic_launcher_round.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_share.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_share.xml"
     },
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_dialog_create_workspace.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/layout/dialog_create_workspace.xml"
     },
     {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_launcher.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_launcher.xml"
-    },
-    {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_workspace.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/layout/activity_workspace.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_multi_view.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_multi_view.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_back.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_back.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_add.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_add.xml"
     },
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_export.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/drawable/ic_export.xml"
     },
     {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_bg_album_normal.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/bg_album_normal.xml"
-    },
-    {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_dialog_delete_confirm.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/layout/dialog_delete_confirm.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_album.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/item_album.xml"
     },
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_multi_image_page.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/layout/item_multi_image_page.xml"
     },
     {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_launcher_round.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_launcher_round.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_album.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/activity_album.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_delete.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_delete.xml"
+        "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_divider.xml.flat",
+        "source": "com.categorical.gallery.app-main-35:/layout/item_divider.xml"
     },
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_select_photo.xml.flat",
@@ -114,10 +170,6 @@
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_main.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/layout/activity_main.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_pin.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/drawable/ic_pin.xml"
     },
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_check_circle.xml.flat",
@@ -132,32 +184,12 @@
         "source": "com.categorical.gallery.app-main-35:/layout/dialog_photo_details.xml"
     },
     {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_dialog_rename_workspace.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/dialog_rename_workspace.xml"
-    },
-    {
         "merged": "com.categorical.gallery.app-merged_res-33:/mipmap-anydpi-v26_ic_launcher.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/mipmap-anydpi-v26/ic_launcher.xml"
     },
     {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_photo.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/item_photo.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_multi_image.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/activity_multi_image.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_activity_photo_select.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/activity_photo_select.xml"
-    },
-    {
         "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_launcher_foreground.xml.flat",
         "source": "com.categorical.gallery.app-main-35:/drawable/ic_launcher_foreground.xml"
-    },
-    {
-        "merged": "com.categorical.gallery.app-merged_res-33:/layout_item_select_folder.xml.flat",
-        "source": "com.categorical.gallery.app-main-35:/layout/item_select_folder.xml"
     },
     {
         "merged": "com.categorical.gallery.app-merged_res-33:/drawable_ic_info.xml.flat",

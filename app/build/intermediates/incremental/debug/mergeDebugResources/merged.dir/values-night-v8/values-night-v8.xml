@@ -1,5 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="colorAccent">#FF448AFF</color>
+    <color name="colorBackground">#FF121212</color>
+    <color name="colorButtonDisabled">#FF555555</color>
+    <color name="colorButtonNormal">#FF1976D2</color>
+    <color name="colorDivider">#FF555555</color>
+    <color name="colorEmptyBg">#FF2A2A2A</color>
+    <color name="colorEmptyText">#FF666666</color>
+    <color name="colorGreen">#FF66BB6A</color>
+    <color name="colorGreenCheck">#FF4CAF50</color>
+    <color name="colorImageViewerBg">#FF1A1A1A</color>
+    <color name="colorPinBg">#FFFFD54F</color>
+    <color name="colorPinRed">#FFEF5350</color>
+    <color name="colorPrimary">#FF1976D2</color>
+    <color name="colorPrimaryDark">#FF0D47A1</color>
+    <color name="colorRed">#FFEF5350</color>
+    <color name="colorSurface">#FF1E1E1E</color>
+    <color name="colorTextPrimary">#FFE0E0E0</color>
+    <color name="colorTextSecondary">#FFAAAAAA</color>
     <style name="Theme.AppCompat.DayNight" parent="Theme.AppCompat"/>
     <style name="Theme.AppCompat.DayNight.DarkActionBar" parent="Theme.AppCompat"/>
     <style name="Theme.AppCompat.DayNight.Dialog" parent="Theme.AppCompat.Dialog"/>

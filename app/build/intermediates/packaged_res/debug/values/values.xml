@@ -5,11 +5,12 @@
     <color name="colorBackground">#FFF5F5F5</color>
     <color name="colorButtonDisabled">#FFBDBDBD</color>
     <color name="colorButtonNormal">#FF1976D2</color>
-    <color name="colorDivider">#FFBDBDBD</color>
+    <color name="colorDivider">#FF999999</color>
     <color name="colorEmptyBg">#FFE0E0E0</color>
     <color name="colorEmptyText">#FF9E9E9E</color>
     <color name="colorGreen">#FF2E7D32</color>
     <color name="colorGreenCheck">#FF4CAF50</color>
+    <color name="colorImageViewerBg">#FFFFFFFF</color>
     <color name="colorPinBg">#FFFFD54F</color>
     <color name="colorPinRed">#FFE53935</color>
     <color name="colorPrimary">#FF1976D2</color>
@@ -23,6 +24,16 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+    <color name="themeBWDark">#FF212121</color>
+    <color name="themeBWPrimary">#FF424242</color>
+    <color name="themeBlueDark">#FF0D47A1</color>
+    <color name="themeBluePrimary">#FF1976D2</color>
+    <color name="themeGreenDark">#FF1B5E20</color>
+    <color name="themeGreenPrimary">#FF388E3C</color>
+    <color name="themePurpleDark">#FF4A148C</color>
+    <color name="themePurplePrimary">#FF7B1FA2</color>
+    <color name="themeRedDark">#FFB71C1C</color>
+    <color name="themeRedPrimary">#FFD32F2F</color>
     <color name="white">#FFFFFFFF</color>
     <string name="action_back">返回</string>
     <string name="action_share">分享图片</string>
@@ -33,7 +44,9 @@
     <string name="btn_finish_exit">完成并退出</string>
     <string name="btn_move_mode">移动模式</string>
     <string name="btn_next_step">下一步</string>
+    <string name="click_to_rename">点击重命名</string>
     <string name="create_new_album">创建新相册</string>
+    <string name="create_new_workspace">创建新工作区</string>
     <string name="default_workspace_name">暂未归入</string>
     <string name="delete_failed_toast">删除失败</string>
     <string name="detail_created_time">创建时间：%1$s</string>
@@ -51,6 +64,8 @@
     <string name="dialog_input_hint_no_space">不允许出现空格</string>
     <string name="dialog_input_hint_rename">不允许空格，不允许与原先同名</string>
     <string name="dialog_original_name">原名称：%1$s</string>
+    <string name="dialog_rename_album_title">重命名该相册</string>
+    <string name="dialog_rename_photo_title">重命名该图片</string>
     <string name="dialog_rename_workspace_title">重命名该工作区</string>
     <string name="empty_system_albums">暂无系统相册</string>
     <string name="empty_text">空</string>
@@ -74,12 +89,15 @@
     <string name="photo_select_root">全部工作区</string>
     <string name="pinned_toast">已置顶</string>
     <string name="progress_format">%1$d%%  (%2$d/%3$d)</string>
+    <string name="rename_album_failed">重命名失败，名称可能已存在</string>
+    <string name="rename_photo_failed">重命名失败，名称可能已存在</string>
+    <string name="rename_photo_success">重命名成功</string>
     <string name="share_chooser_title">分享图片</string>
     <string name="share_failed_toast">分享失败</string>
     <string name="title_select_export_mode">选择导出方式</string>
     <string name="title_select_import_mode">选择导入方式</string>
     <string name="title_select_system_album">选择导入系统相册</string>
-    <string name="toolbar_workspace">工作区</string>
+    <string name="toolbar_workspace">我的工作区</string>
     <string name="unpinned_toast">已取消置顶</string>
     <style name="Theme.CategoricalGallery" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>

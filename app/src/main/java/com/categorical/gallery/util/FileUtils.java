@@ -189,24 +189,106 @@ public class FileUtils {
     }
 
     /**
+     * Get the most recently modified photo in an album (for album cover).
+     */
+    public static Photo getMostRecentPhoto(String workspaceName, String albumName) {
+        File albumDir = getAlbumDir(workspaceName, albumName);
+        File[] files = albumDir.listFiles(file -> file.isFile() && isImageFile(file.getName()));
+        if (files == null || files.length == 0) {
+            return null;
+        }
+        File latest = files[0];
+        for (File file : files) {
+            if (file.lastModified() > latest.lastModified()) {
+                latest = file;
+            }
+        }
+        return new Photo(latest);
+    }
+
+    /**
      * Get up to 4 album cover photos for a workspace icon (2x2 grid).
-     * Uses the earliest modified photo from each of the first 4 albums.
+     * Uses the most recently modified photo from each of up to 4 albums,
+     * sorted by album modification time (newest first).
      */
     public static List<String> getWorkspaceCovers(String workspaceName) {
         List<String> covers = new ArrayList<>();
         List<Album> albums = getAlbums(workspaceName);
-        // Sort albums by name for consistent ordering
-        albums.sort((a, b) -> a.getName().compareTo(b.getName()));
+        albums.sort((a, b) -> Long.compare(b.getPath().lastModified(), a.getPath().lastModified()));
         int count = Math.min(albums.size(), 4);
         for (int i = 0; i < count; i++) {
-            Photo photo = getEarliestPhoto(workspaceName, albums.get(i).getName());
+            Photo photo = getMostRecentPhoto(workspaceName, albums.get(i).getName());
             if (photo != null) {
                 covers.add(photo.getAbsolutePath());
             } else {
-                covers.add(null); // Empty album
+                covers.add(null);
             }
         }
         return covers;
+    }
+
+    public static boolean isDefaultWorkspace(String name) {
+        return DEFAULT_WORKSPACE_NAME.equals(name);
+    }
+
+    public static boolean deleteWorkspace(String name) {
+        if (isDefaultWorkspace(name)) return false;
+        File dir = getWorkspaceDir(name);
+        if (!dir.exists()) return false;
+        File defaultDir = getWorkspaceDir(DEFAULT_WORKSPACE_NAME);
+        File[] albums = dir.listFiles(File::isDirectory);
+        if (albums != null) {
+            for (File album : albums) {
+                File dest = new File(defaultDir, album.getName());
+                if (dest.exists()) {
+                    int suffix = 1;
+                    while (new File(defaultDir, album.getName() + "_" + suffix).exists()) {
+                        suffix++;
+                    }
+                    dest = new File(defaultDir, album.getName() + "_" + suffix);
+                }
+                album.renameTo(dest);
+            }
+        }
+        return deleteRecursive(dir);
+    }
+
+    public static boolean deleteAlbum(String workspaceName, String albumName) {
+        File albumDir = getAlbumDir(workspaceName, albumName);
+        if (!albumDir.exists()) return false;
+        return deleteRecursive(albumDir);
+    }
+
+    public static boolean renameAlbum(String workspaceName, String oldName, String newName) {
+        File oldDir = getAlbumDir(workspaceName, oldName);
+        File newDir = getAlbumDir(workspaceName, newName);
+        if (!oldDir.exists() || newDir.exists()) return false;
+        return oldDir.renameTo(newDir);
+    }
+
+    public static boolean renamePhoto(Context context, File oldFile, File newFile) {
+        if (!oldFile.exists() || newFile.exists()) return false;
+        boolean success = oldFile.renameTo(newFile);
+        if (success) {
+            String oldPath = oldFile.getAbsolutePath();
+            if (isPinned(context, oldPath)) {
+                unpinPhoto(context, oldPath);
+                pinPhoto(context, newFile.getAbsolutePath());
+            }
+        }
+        return success;
+    }
+
+    private static boolean deleteRecursive(File file) {
+        if (file.isDirectory()) {
+            File[] children = file.listFiles();
+            if (children != null) {
+                for (File child : children) {
+                    if (!deleteRecursive(child)) return false;
+                }
+            }
+        }
+        return file.delete();
     }
 
     /**
