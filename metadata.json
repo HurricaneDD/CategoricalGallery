@@ -1,0 +1,6 @@
+{
+  "name": "分类相册",
+  "description": "Categorical Gallery - An Android photo album management app for categorizing, importing, viewing, and exporting photos.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
