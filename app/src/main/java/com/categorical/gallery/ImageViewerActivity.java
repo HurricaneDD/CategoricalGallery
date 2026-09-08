@@ -221,7 +221,7 @@ public class ImageViewerActivity extends AppCompatActivity {
         }
         try {
             Uri uri = FileProvider.getUriForFile(this,
-                    "com.categorical.gallery.fileprovider", photo.getFile());
+                    getPackageName() + ".fileprovider", photo.getFile());
             Intent intent = new Intent(Intent.ACTION_SEND);
             intent.setType("image/*");
             intent.putExtra(Intent.EXTRA_STREAM, uri);

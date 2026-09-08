@@ -206,14 +206,7 @@ public class MainActivity extends AppCompatActivity {
                                            @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
         if (requestCode == PermissionUtils.REQUEST_STORAGE_PERMISSION) {
-            boolean granted = true;
-            for (int result : grantResults) {
-                if (result != PackageManager.PERMISSION_GRANTED) {
-                    granted = false;
-                    break;
-                }
-            }
-            if (granted) {
+            if (PermissionUtils.hasStoragePermission(this)) {
                 loadWorkspaces();
             } else {
                 Toast.makeText(this, R.string.permission_denied, Toast.LENGTH_LONG).show();
