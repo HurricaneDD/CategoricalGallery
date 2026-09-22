@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
@@ -81,6 +82,9 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
                 ContextCompat.getColor(context, R.color.colorPrimary));
         holder.photo.setImageResource(R.drawable.ic_add);
         holder.pin.setVisibility(View.GONE);
+        if (holder.videoBadge != null) {
+            holder.videoBadge.setVisibility(View.GONE);
+        }
         holder.itemView.setOnLongClickListener(null);
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) listener.onAddClick();
@@ -97,6 +101,15 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
                 .centerCrop()
                 .into(holder.photo);
         holder.pin.setVisibility(photo.isPinned() ? View.VISIBLE : View.GONE);
+
+        if (holder.videoBadge != null) {
+            if (photo.isVideo()) {
+                holder.videoBadge.setVisibility(View.VISIBLE);
+                holder.tvVideoDuration.setText(photo.getFormattedDuration());
+            } else {
+                holder.videoBadge.setVisibility(View.GONE);
+            }
+        }
 
         holder.itemView.setOnClickListener(v -> {
             if (listener != null) {
@@ -123,12 +136,16 @@ public class PhotoAdapter extends RecyclerView.Adapter<PhotoAdapter.PhotoViewHol
         FrameLayout container;
         ImageView photo;
         ImageView pin;
+        View videoBadge;
+        TextView tvVideoDuration;
 
         PhotoViewHolder(@NonNull View itemView) {
             super(itemView);
             container = itemView.findViewById(R.id.photo_container);
             photo = itemView.findViewById(R.id.iv_photo);
             pin = itemView.findViewById(R.id.iv_pin);
+            videoBadge = itemView.findViewById(R.id.layout_video_badge);
+            tvVideoDuration = itemView.findViewById(R.id.tv_video_duration);
         }
     }
 }

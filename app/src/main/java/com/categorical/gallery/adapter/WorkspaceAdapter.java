@@ -32,6 +32,7 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     private static final int TYPE_WORKSPACE = 0;
     private static final int TYPE_ADD = 1;
     private static final int TYPE_DIVIDER = 2;
+    private static final int TYPE_EMPTY = 3;
 
     private static final String PAYLOAD_SELECTION = "selection";
 
@@ -117,45 +118,53 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         this.multiSelectListener = listener;
     }
 
+    public boolean isEmptyPosition(int position) {
+        return regularWorkspaces.isEmpty() && position == 0;
+    }
+
     public boolean isDividerPosition(int position) {
-        return position == getRegularCount();
+        return position == getDividerPos();
     }
 
     private int getRegularCount() {
         return regularWorkspaces.size();
     }
 
-    private int getDefaultPos() {
-        return regularWorkspaces.size();
+    private int getDividerPos() {
+        return regularWorkspaces.isEmpty() ? 1 : regularWorkspaces.size();
     }
 
-    private int getDividerPos() {
-        return regularWorkspaces.size() + (defaultWorkspace != null ? 1 : 0);
+    private int getDefaultPos() {
+        return defaultWorkspace != null ? getDividerPos() + 1 : -1;
     }
 
     private int getAddPos() {
-        return getDividerPos() + 1;
+        return defaultWorkspace != null ? getDefaultPos() + 1 : getDividerPos() + 1;
     }
 
     @Override
     public int getItemViewType(int position) {
-        if (position == getAddPos()) return TYPE_ADD;
+        if (isEmptyPosition(position)) return TYPE_EMPTY;
         if (position == getDividerPos()) return TYPE_DIVIDER;
         if (defaultWorkspace != null && position == getDefaultPos()) return TYPE_WORKSPACE;
+        if (position == getAddPos()) return TYPE_ADD;
         return TYPE_WORKSPACE;
     }
 
     @Override
     public int getItemCount() {
-        int count = regularWorkspaces.size();
-        if (defaultWorkspace != null) count += 1;
+        int count = regularWorkspaces.isEmpty() ? 1 : regularWorkspaces.size();
         count += 2; // divider + add
+        if (defaultWorkspace != null) count += 1;
         return count;
     }
 
     private Workspace getWorkspaceAt(int position) {
         if (defaultWorkspace != null && position == getDefaultPos()) {
             return defaultWorkspace;
+        }
+        if (regularWorkspaces.isEmpty()) {
+            return null;
         }
         if (position < regularWorkspaces.size()) {
             return regularWorkspaces.get(position);
@@ -170,6 +179,7 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 int pos = holder.getAdapterPosition();
                 if (pos < 0) return 0;
                 if (getItemViewType(pos) != TYPE_WORKSPACE) return 0;
+                if (pos == getDefaultPos()) return 0;
                 int dragFlags = ItemTouchHelper.UP | ItemTouchHelper.DOWN |
                         ItemTouchHelper.LEFT | ItemTouchHelper.RIGHT;
                 return makeMovementFlags(dragFlags, 0);
@@ -230,6 +240,10 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
+        if (viewType == TYPE_EMPTY) {
+            View view = inflater.inflate(R.layout.item_empty_workspace, parent, false);
+            return new EmptyViewHolder(view);
+        }
         if (viewType == TYPE_DIVIDER) {
             View view = inflater.inflate(R.layout.item_divider, parent, false);
             return new DividerViewHolder(view);
@@ -241,7 +255,7 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
-        if (viewType == TYPE_DIVIDER) return;
+        if (viewType == TYPE_EMPTY || viewType == TYPE_DIVIDER) return;
         if (viewType == TYPE_ADD) {
             bindAdd((WorkspaceViewHolder) holder);
         } else {
@@ -271,9 +285,10 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.viewSelectionOverlay.setVisibility(View.GONE);
         holder.viewBorder.setVisibility(View.GONE);
         holder.itemView.setOnClickListener(v -> {
+            if (multiSelectMode) return;
             if (addClickListener != null) addClickListener.onAddClick();
         });
-        holder.itemView.setOnLongClickListener(null);
+        holder.itemView.setOnLongClickListener(v -> false);
     }
 
     private void bindWorkspace(@NonNull WorkspaceViewHolder holder, int position) {
@@ -289,6 +304,7 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             GradientDrawable border = new GradientDrawable();
             border.setColor(Color.TRANSPARENT);
             border.setStroke(dpToPx(3), borderColor);
+            border.setCornerRadius(0);
             holder.viewBorder.setBackground(border);
             holder.viewBorder.setVisibility(View.VISIBLE);
         } else {
@@ -333,6 +349,15 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             if (pos == RecyclerView.NO_POSITION || getItemViewType(pos) != TYPE_WORKSPACE) {
                 return;
             }
+            if (pos == getDefaultPos()) {
+                if (multiSelectMode) {
+                    return;
+                }
+                if (clickListener != null) {
+                    clickListener.onWorkspaceClick(workspace, pos);
+                }
+                return;
+            }
             Workspace ws = getWorkspaceAt(pos);
             if (ws == null) return;
             if (multiSelectMode) {
@@ -347,6 +372,9 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         holder.itemView.setOnLongClickListener(v -> {
             int pos = holder.getAdapterPosition();
             if (pos == RecyclerView.NO_POSITION || getItemViewType(pos) != TYPE_WORKSPACE) {
+                return false;
+            }
+            if (pos == getDefaultPos()) {
                 return false;
             }
             Workspace ws = getWorkspaceAt(pos);
@@ -367,6 +395,11 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void updateSelectionState(@NonNull WorkspaceViewHolder holder, int position) {
+        if (position >= regularWorkspaces.size()) {
+            holder.ivSelection.setVisibility(View.GONE);
+            holder.viewSelectionOverlay.setVisibility(View.GONE);
+            return;
+        }
         if (multiSelectMode) {
             holder.ivSelection.setVisibility(View.VISIBLE);
             Workspace ws = getWorkspaceAt(position);
@@ -385,6 +418,9 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     public void enterMultiSelectMode(String name) {
+        if (FileUtils.isDefaultWorkspace(name)) {
+            return;
+        }
         multiSelectMode = true;
         selectedNames.clear();
         selectedNames.add(name);
@@ -404,6 +440,9 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
     }
 
     private void toggleSelection(String name) {
+        if (FileUtils.isDefaultWorkspace(name)) {
+            return;
+        }
         if (selectedNames.contains(name)) {
             selectedNames.remove(name);
             if (selectedNames.isEmpty()) {
@@ -486,6 +525,12 @@ public class WorkspaceAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
     static class DividerViewHolder extends RecyclerView.ViewHolder {
         DividerViewHolder(View itemView) {
+            super(itemView);
+        }
+    }
+
+    static class EmptyViewHolder extends RecyclerView.ViewHolder {
+        EmptyViewHolder(View itemView) {
             super(itemView);
         }
     }

@@ -29,11 +29,121 @@ public class FileUtils {
     private static final String TAG = "FileUtils";
     private static final String HIDDEN_DIR_NAME = ".CategoricalGallery";
     private static final String WORKSPACES_DIR_NAME = "workspaces";
+    private static final String ONLINE_WORKSPACES_DIR_NAME = "online_workspaces";
     private static final String DEFAULT_WORKSPACE_NAME = "暂未归入";
     private static final String PREFS_NAME = "pinned_photos_prefs";
     private static final String PINNED_KEY = "pinned_photo_paths";
+    private static File sRootDir = null;
+    private static Context sContext = null;
+
+    public static void init(Context context) {
+        if (context != null) {
+            sContext = context.getApplicationContext();
+        }
+    }
+
+    public static void resetRootDir() {
+        sRootDir = null;
+    }
 
     public static File getRootDir() {
+        if (sRootDir != null && sRootDir.exists()) {
+            return sRootDir;
+        }
+
+        // Candidates to check: prioritize directories that already have workspaces
+        List<File> candidates = new ArrayList<>();
+
+        try {
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (downloadsDir != null) {
+                candidates.add(new File(downloadsDir, HIDDEN_DIR_NAME));
+                candidates.add(new File(downloadsDir, "CategoricalGallery"));
+            }
+        } catch (Exception ignored) {}
+
+        try {
+            File extStorage = Environment.getExternalStorageDirectory();
+            if (extStorage != null) {
+                candidates.add(new File(extStorage, "Download/" + HIDDEN_DIR_NAME));
+                candidates.add(new File(extStorage, "Downloads/" + HIDDEN_DIR_NAME));
+                candidates.add(new File(extStorage, HIDDEN_DIR_NAME));
+                candidates.add(new File(extStorage, "Download/CategoricalGallery"));
+                candidates.add(new File(extStorage, "Downloads/CategoricalGallery"));
+                candidates.add(new File(extStorage, "CategoricalGallery"));
+            }
+        } catch (Exception ignored) {}
+
+        // Check if any candidate exists and already has legacy workspaces
+        for (File candidate : candidates) {
+            try {
+                if (candidate.exists()) {
+                    File wsDir = new File(candidate, WORKSPACES_DIR_NAME);
+                    if (wsDir.exists() && wsDir.isDirectory()) {
+                        File[] list = wsDir.listFiles();
+                        if (list != null && list.length > 0) {
+                            sRootDir = candidate;
+                            return sRootDir;
+                        }
+                    }
+                }
+            } catch (Exception ignored) {}
+        }
+
+        // Check if any candidate exists and is readable
+        for (File candidate : candidates) {
+            try {
+                if (candidate.exists() && candidate.canRead()) {
+                    sRootDir = candidate;
+                    return sRootDir;
+                }
+            } catch (Exception ignored) {}
+        }
+
+        // Try standard downloads directory first
+        try {
+            File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            if (downloadsDir != null) {
+                File rootDir = new File(downloadsDir, HIDDEN_DIR_NAME);
+                if (rootDir.exists() || rootDir.mkdirs()) {
+                    sRootDir = rootDir;
+                    return sRootDir;
+                }
+            }
+        } catch (Exception e) {
+            Log.w(TAG, "Could not access Downloads directory: " + e.getMessage());
+        }
+
+        // Fallback to app-specific external files dir if scoped storage prevents public download directory access
+        if (sContext != null) {
+            try {
+                File extDir = sContext.getExternalFilesDir(null);
+                if (extDir != null) {
+                    File rootDir = new File(extDir, HIDDEN_DIR_NAME);
+                    if (rootDir.exists() || rootDir.mkdirs()) {
+                        sRootDir = rootDir;
+                        return sRootDir;
+                    }
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Could not access getExternalFilesDir: " + e.getMessage());
+            }
+
+            // Fallback to internal files dir
+            try {
+                File intDir = sContext.getFilesDir();
+                if (intDir != null) {
+                    File rootDir = new File(intDir, HIDDEN_DIR_NAME);
+                    if (rootDir.exists() || rootDir.mkdirs()) {
+                        sRootDir = rootDir;
+                        return sRootDir;
+                    }
+                }
+            } catch (Exception e) {
+                Log.w(TAG, "Could not access getFilesDir: " + e.getMessage());
+            }
+        }
+
         File downloadsDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
         return new File(downloadsDir, HIDDEN_DIR_NAME);
     }
@@ -42,12 +152,28 @@ public class FileUtils {
         return new File(getRootDir(), WORKSPACES_DIR_NAME);
     }
 
+    public static File getOnlineWorkspacesDir() {
+        return new File(getRootDir(), ONLINE_WORKSPACES_DIR_NAME);
+    }
+
+    public static File getWorkspacesBaseDir(boolean isOnline) {
+        return isOnline ? getOnlineWorkspacesDir() : getWorkspacesDir();
+    }
+
     public static File getWorkspaceDir(String workspaceName) {
-        return new File(getWorkspacesDir(), workspaceName);
+        return getWorkspaceDir(workspaceName, false);
+    }
+
+    public static File getWorkspaceDir(String workspaceName, boolean isOnline) {
+        return new File(getWorkspacesBaseDir(isOnline), workspaceName);
     }
 
     public static File getAlbumDir(String workspaceName, String albumName) {
-        return new File(getWorkspaceDir(workspaceName), albumName);
+        return getAlbumDir(workspaceName, albumName, false);
+    }
+
+    public static File getAlbumDir(String workspaceName, String albumName, boolean isOnline) {
+        return new File(getWorkspaceDir(workspaceName, isOnline), albumName);
     }
 
     /**
@@ -72,10 +198,20 @@ public class FileUtils {
             workspacesDir.mkdirs();
         }
 
+        File onlineWorkspacesDir = getOnlineWorkspacesDir();
+        if (!onlineWorkspacesDir.exists()) {
+            onlineWorkspacesDir.mkdirs();
+        }
+
         // Create default workspace if it doesn't exist
-        File defaultWorkspace = getWorkspaceDir(DEFAULT_WORKSPACE_NAME);
+        File defaultWorkspace = getWorkspaceDir(DEFAULT_WORKSPACE_NAME, false);
         if (!defaultWorkspace.exists()) {
             defaultWorkspace.mkdirs();
+        }
+
+        File defaultOnlineWorkspace = getWorkspaceDir(DEFAULT_WORKSPACE_NAME, true);
+        if (!defaultOnlineWorkspace.exists()) {
+            defaultOnlineWorkspace.mkdirs();
         }
     }
 
@@ -83,8 +219,15 @@ public class FileUtils {
      * Get all workspaces.
      */
     public static List<Workspace> getWorkspaces() {
+        return getWorkspaces(false);
+    }
+
+    public static List<Workspace> getWorkspaces(boolean isOnline) {
         List<Workspace> workspaces = new ArrayList<>();
-        File workspacesDir = getWorkspacesDir();
+        File workspacesDir = getWorkspacesBaseDir(isOnline);
+        if (!workspacesDir.exists()) {
+            workspacesDir.mkdirs();
+        }
         File[] dirs = workspacesDir.listFiles(File::isDirectory);
         if (dirs != null) {
             for (File dir : dirs) {
@@ -99,7 +242,11 @@ public class FileUtils {
      * @return true if created successfully, false if already exists or creation failed
      */
     public static boolean createWorkspace(String name) {
-        File workspaceDir = getWorkspaceDir(name);
+        return createWorkspace(name, false);
+    }
+
+    public static boolean createWorkspace(String name, boolean isOnline) {
+        File workspaceDir = getWorkspaceDir(name, isOnline);
         if (workspaceDir.exists()) {
             return false;
         }
@@ -111,8 +258,12 @@ public class FileUtils {
      * @return true if renamed successfully
      */
     public static boolean renameWorkspace(String oldName, String newName) {
-        File oldDir = getWorkspaceDir(oldName);
-        File newDir = getWorkspaceDir(newName);
+        return renameWorkspace(oldName, newName, false);
+    }
+
+    public static boolean renameWorkspace(String oldName, String newName, boolean isOnline) {
+        File oldDir = getWorkspaceDir(oldName, isOnline);
+        File newDir = getWorkspaceDir(newName, isOnline);
         if (!oldDir.exists() || newDir.exists()) {
             return false;
         }
@@ -123,8 +274,12 @@ public class FileUtils {
      * Get all albums in a workspace.
      */
     public static List<Album> getAlbums(String workspaceName) {
+        return getAlbums(workspaceName, false);
+    }
+
+    public static List<Album> getAlbums(String workspaceName, boolean isOnline) {
         List<Album> albums = new ArrayList<>();
-        File workspaceDir = getWorkspaceDir(workspaceName);
+        File workspaceDir = getWorkspaceDir(workspaceName, isOnline);
         File[] dirs = workspaceDir.listFiles(File::isDirectory);
         if (dirs != null) {
             for (File dir : dirs) {
@@ -138,7 +293,11 @@ public class FileUtils {
      * Create a new album in a workspace.
      */
     public static boolean createAlbum(String workspaceName, String albumName) {
-        File albumDir = getAlbumDir(workspaceName, albumName);
+        return createAlbum(workspaceName, albumName, false);
+    }
+
+    public static boolean createAlbum(String workspaceName, String albumName, boolean isOnline) {
+        File albumDir = getAlbumDir(workspaceName, albumName, isOnline);
         if (albumDir.exists()) {
             return false;
         }
@@ -150,15 +309,24 @@ public class FileUtils {
      * Pinned photos are placed at the beginning.
      */
     public static List<Photo> getPhotos(Context context, String workspaceName, String albumName) {
+        return getPhotos(context, workspaceName, albumName, false);
+    }
+
+    public static List<Photo> getPhotos(Context context, String workspaceName, String albumName, boolean isOnline) {
         List<Photo> photos = new ArrayList<>();
-        File albumDir = getAlbumDir(workspaceName, albumName);
-        File[] files = albumDir.listFiles(file -> file.isFile() && isImageFile(file.getName()));
+        File albumDir = getAlbumDir(workspaceName, albumName, isOnline);
+        if (albumDir == null || !albumDir.exists()) {
+            return photos;
+        }
+        File[] files = albumDir.listFiles();
         if (files != null) {
             Set<String> pinnedPaths = getPinnedPaths(context);
             for (File file : files) {
-                Photo photo = new Photo(file);
-                photo.setPinned(pinnedPaths.contains(file.getAbsolutePath()));
-                photos.add(photo);
+                if (isMediaFile(file)) {
+                    Photo photo = new Photo(file);
+                    photo.setPinned(pinnedPaths.contains(file.getAbsolutePath()));
+                    photos.add(photo);
+                }
             }
         }
         // Sort: pinned first, then by modification time (newest first)
@@ -174,36 +342,54 @@ public class FileUtils {
      * Get the earliest modified photo in an album (for album cover).
      */
     public static Photo getEarliestPhoto(String workspaceName, String albumName) {
-        File albumDir = getAlbumDir(workspaceName, albumName);
-        File[] files = albumDir.listFiles(file -> file.isFile() && isImageFile(file.getName()));
+        return getEarliestPhoto(workspaceName, albumName, false);
+    }
+
+    public static Photo getEarliestPhoto(String workspaceName, String albumName, boolean isOnline) {
+        File albumDir = getAlbumDir(workspaceName, albumName, isOnline);
+        if (albumDir == null || !albumDir.exists()) {
+            return null;
+        }
+        File[] files = albumDir.listFiles();
         if (files == null || files.length == 0) {
             return null;
         }
-        File earliest = files[0];
+        File earliest = null;
         for (File file : files) {
-            if (file.lastModified() < earliest.lastModified()) {
-                earliest = file;
+            if (isMediaFile(file)) {
+                if (earliest == null || file.lastModified() < earliest.lastModified()) {
+                    earliest = file;
+                }
             }
         }
-        return new Photo(earliest);
+        return earliest != null ? new Photo(earliest) : null;
     }
 
     /**
      * Get the most recently modified photo in an album (for album cover).
      */
     public static Photo getMostRecentPhoto(String workspaceName, String albumName) {
-        File albumDir = getAlbumDir(workspaceName, albumName);
-        File[] files = albumDir.listFiles(file -> file.isFile() && isImageFile(file.getName()));
+        return getMostRecentPhoto(workspaceName, albumName, false);
+    }
+
+    public static Photo getMostRecentPhoto(String workspaceName, String albumName, boolean isOnline) {
+        File albumDir = getAlbumDir(workspaceName, albumName, isOnline);
+        if (albumDir == null || !albumDir.exists()) {
+            return null;
+        }
+        File[] files = albumDir.listFiles();
         if (files == null || files.length == 0) {
             return null;
         }
-        File latest = files[0];
+        File latest = null;
         for (File file : files) {
-            if (file.lastModified() > latest.lastModified()) {
-                latest = file;
+            if (isMediaFile(file)) {
+                if (latest == null || file.lastModified() > latest.lastModified()) {
+                    latest = file;
+                }
             }
         }
-        return new Photo(latest);
+        return latest != null ? new Photo(latest) : null;
     }
 
     /**
@@ -212,12 +398,16 @@ public class FileUtils {
      * sorted by album modification time (newest first).
      */
     public static List<String> getWorkspaceCovers(String workspaceName) {
+        return getWorkspaceCovers(workspaceName, false);
+    }
+
+    public static List<String> getWorkspaceCovers(String workspaceName, boolean isOnline) {
         List<String> covers = new ArrayList<>();
-        List<Album> albums = getAlbums(workspaceName);
+        List<Album> albums = getAlbums(workspaceName, isOnline);
         albums.sort((a, b) -> Long.compare(b.getPath().lastModified(), a.getPath().lastModified()));
         int count = Math.min(albums.size(), 4);
         for (int i = 0; i < count; i++) {
-            Photo photo = getMostRecentPhoto(workspaceName, albums.get(i).getName());
+            Photo photo = getMostRecentPhoto(workspaceName, albums.get(i).getName(), isOnline);
             if (photo != null) {
                 covers.add(photo.getAbsolutePath());
             } else {
@@ -232,10 +422,15 @@ public class FileUtils {
     }
 
     public static boolean deleteWorkspace(String name) {
+        return deleteWorkspace(name, false);
+    }
+
+    public static boolean deleteWorkspace(String name, boolean isOnline) {
         if (isDefaultWorkspace(name)) return false;
-        File dir = getWorkspaceDir(name);
+        File dir = getWorkspaceDir(name, isOnline);
         if (!dir.exists()) return false;
-        File defaultDir = getWorkspaceDir(DEFAULT_WORKSPACE_NAME);
+        File defaultDir = getWorkspaceDir(DEFAULT_WORKSPACE_NAME, isOnline);
+        if (!defaultDir.exists()) defaultDir.mkdirs();
         File[] albums = dir.listFiles(File::isDirectory);
         if (albums != null) {
             for (File album : albums) {
@@ -254,14 +449,22 @@ public class FileUtils {
     }
 
     public static boolean deleteAlbum(String workspaceName, String albumName) {
-        File albumDir = getAlbumDir(workspaceName, albumName);
+        return deleteAlbum(workspaceName, albumName, false);
+    }
+
+    public static boolean deleteAlbum(String workspaceName, String albumName, boolean isOnline) {
+        File albumDir = getAlbumDir(workspaceName, albumName, isOnline);
         if (!albumDir.exists()) return false;
         return deleteRecursive(albumDir);
     }
 
     public static boolean renameAlbum(String workspaceName, String oldName, String newName) {
-        File oldDir = getAlbumDir(workspaceName, oldName);
-        File newDir = getAlbumDir(workspaceName, newName);
+        return renameAlbum(workspaceName, oldName, newName, false);
+    }
+
+    public static boolean renameAlbum(String workspaceName, String oldName, String newName, boolean isOnline) {
+        File oldDir = getAlbumDir(workspaceName, oldName, isOnline);
+        File newDir = getAlbumDir(workspaceName, newName, isOnline);
         if (!oldDir.exists() || newDir.exists()) return false;
         return oldDir.renameTo(newDir);
     }
@@ -295,7 +498,11 @@ public class FileUtils {
      * Check if a workspace has any albums.
      */
     public static boolean hasAlbums(String workspaceName) {
-        File workspaceDir = getWorkspaceDir(workspaceName);
+        return hasAlbums(workspaceName, false);
+    }
+
+    public static boolean hasAlbums(String workspaceName, boolean isOnline) {
+        File workspaceDir = getWorkspaceDir(workspaceName, isOnline);
         File[] dirs = workspaceDir.listFiles(File::isDirectory);
         return dirs != null && dirs.length > 0;
     }
@@ -304,15 +511,115 @@ public class FileUtils {
      * Check if an album has any photos.
      */
     public static boolean hasPhotos(String workspaceName, String albumName) {
-        File albumDir = getAlbumDir(workspaceName, albumName);
-        File[] files = albumDir.listFiles(file -> file.isFile() && isImageFile(file.getName()));
-        return files != null && files.length > 0;
+        return hasPhotos(workspaceName, albumName, false);
     }
 
-    private static boolean isImageFile(String name) {
-        String lower = name.toLowerCase(Locale.ROOT);
+    public static boolean hasPhotos(String workspaceName, String albumName, boolean isOnline) {
+        File albumDir = getAlbumDir(workspaceName, albumName, isOnline);
+        if (albumDir == null || !albumDir.exists()) return false;
+        File[] files = albumDir.listFiles();
+        if (files != null) {
+            for (File file : files) {
+                if (isMediaFile(file)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public static boolean isImageFile(File file) {
+        if (file == null) return false;
+        String name = file.getName().trim();
+        if (name.startsWith(".")) return false;
+        if (file.isDirectory()) return false;
+        if (isImageFile(name)) return true;
+
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(file.getAbsolutePath(), options);
+            if (options.outWidth > 0 && options.outHeight > 0) {
+                return true;
+            }
+        } catch (Throwable ignored) {}
+
+        return false;
+    }
+
+    public static boolean isImageFile(String name) {
+        if (name == null || name.isEmpty() || name.startsWith(".")) return false;
+        String lower = name.trim().toLowerCase(Locale.ROOT);
         return lower.endsWith(".jpg") || lower.endsWith(".jpeg") || lower.endsWith(".png")
-                || lower.endsWith(".gif") || lower.endsWith(".bmp") || lower.endsWith(".webp");
+                || lower.endsWith(".gif") || lower.endsWith(".bmp") || lower.endsWith(".webp")
+                || lower.endsWith(".heic") || lower.endsWith(".heif") || lower.endsWith(".dng")
+                || lower.endsWith(".jfif") || lower.endsWith(".jpe") || lower.endsWith(".avif")
+                || lower.endsWith(".tif") || lower.endsWith(".tiff") || lower.endsWith(".svg")
+                || lower.endsWith(".cr2") || lower.endsWith(".nef") || lower.endsWith(".arw");
+    }
+
+    public static boolean isVideoFile(File file) {
+        if (file == null) return false;
+        String name = file.getName().trim();
+        if (name.startsWith(".")) return false;
+        if (file.isDirectory()) return false;
+        return isVideoFile(name);
+    }
+
+    public static boolean isVideoFile(String name) {
+        if (name == null || name.isEmpty() || name.startsWith(".")) return false;
+        String lower = name.trim().toLowerCase(Locale.ROOT);
+        return lower.endsWith(".mp4") || lower.endsWith(".mkv") || lower.endsWith(".mov")
+                || lower.endsWith(".avi") || lower.endsWith(".3gp") || lower.endsWith(".webm")
+                || lower.endsWith(".flv") || lower.endsWith(".wmv") || lower.endsWith(".m4v")
+                || lower.endsWith(".ts") || lower.endsWith(".mpg") || lower.endsWith(".mpeg");
+    }
+
+    public static boolean isMediaFile(File file) {
+        return isImageFile(file) || isVideoFile(file);
+    }
+
+    public static boolean isMediaFile(String name) {
+        return isImageFile(name) || isVideoFile(name);
+    }
+
+    public static long getVideoDuration(File file) {
+        if (file == null || !file.exists()) return 0;
+        android.media.MediaMetadataRetriever retriever = new android.media.MediaMetadataRetriever();
+        try {
+            retriever.setDataSource(file.getAbsolutePath());
+            String durationStr = retriever.extractMetadata(android.media.MediaMetadataRetriever.METADATA_KEY_DURATION);
+            if (durationStr != null) {
+                return Long.parseLong(durationStr);
+            }
+        } catch (Throwable ignored) {
+        } finally {
+            try {
+                retriever.release();
+            } catch (Throwable ignored) {}
+        }
+        return 0;
+    }
+
+    public static String formatDuration(long millis) {
+        if (millis <= 0) return "00:00";
+        long totalSeconds = millis / 1000;
+        long seconds = totalSeconds % 60;
+        long minutes = (totalSeconds / 60) % 60;
+        long hours = totalSeconds / 3600;
+        if (hours > 0) {
+            return String.format(Locale.ROOT, "%d:%02d:%02d", hours, minutes, seconds);
+        } else {
+            return String.format(Locale.ROOT, "%02d:%02d", minutes, seconds);
+        }
+    }
+
+    private static boolean isNonMediaFile(String name) {
+        String lower = name.trim().toLowerCase(Locale.ROOT);
+        return lower.endsWith(".txt") || lower.endsWith(".pdf") || lower.endsWith(".doc")
+                || lower.endsWith(".docx") || lower.endsWith(".zip") || lower.endsWith(".rar")
+                || lower.endsWith(".7z") || lower.endsWith(".apk") || lower.endsWith(".json")
+                || lower.endsWith(".xml") || lower.endsWith(".html") || lower.endsWith(".db");
     }
 
     // ==================== Pin Management ====================
@@ -400,16 +707,19 @@ public class FileUtils {
     public static List<File> getAllPhotos() {
         List<File> photos = new ArrayList<>();
         File workspacesDir = getWorkspacesDir();
+        if (workspacesDir == null || !workspacesDir.exists()) return photos;
         File[] workspaceDirs = workspacesDir.listFiles(File::isDirectory);
         if (workspaceDirs != null) {
             for (File wsDir : workspaceDirs) {
                 File[] albumDirs = wsDir.listFiles(File::isDirectory);
                 if (albumDirs != null) {
                     for (File albumDir : albumDirs) {
-                        File[] files = albumDir.listFiles(file -> file.isFile() && isImageFile(file.getName()));
+                        File[] files = albumDir.listFiles();
                         if (files != null) {
                             for (File file : files) {
-                                photos.add(file);
+                                if (isMediaFile(file)) {
+                                    photos.add(file);
+                                }
                             }
                         }
                     }

@@ -1,6 +1,7 @@
 package com.categorical.gallery;
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.graphics.Typeface;
 import android.os.Bundle;
 import android.os.Handler;
@@ -23,6 +24,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.ImageViewCompat;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -47,8 +49,10 @@ public class WorkspaceActivity extends AppCompatActivity
                    AlbumAdapter.OnMultiSelectListener {
 
     public static final String EXTRA_WORKSPACE_NAME = "workspaceName";
+    public static final String EXTRA_IS_ONLINE = "isOnline";
 
     private String workspaceName;
+    private boolean isOnline = false;
     private Toolbar toolbar;
     private RecyclerView recyclerView;
     private AlbumAdapter adapter;
@@ -65,6 +69,7 @@ public class WorkspaceActivity extends AppCompatActivity
         setContentView(R.layout.activity_workspace);
 
         workspaceName = getIntent().getStringExtra(EXTRA_WORKSPACE_NAME);
+        isOnline = getIntent().getBooleanExtra(EXTRA_IS_ONLINE, false);
         if (workspaceName == null) {
             finish();
             return;
@@ -88,8 +93,25 @@ public class WorkspaceActivity extends AppCompatActivity
         bottomToolbar = findViewById(R.id.bottomToolbar);
         ImageButton btnMultiDelete = findViewById(R.id.btnMultiDelete);
         ImageButton btnMultiRename = findViewById(R.id.btnMultiRename);
-        btnMultiDelete.setOnClickListener(v -> handleBatchDelete());
-        btnMultiRename.setOnClickListener(v -> handleBatchRename());
+        TextView tvMultiDelete = findViewById(R.id.tvMultiDelete);
+        TextView tvMultiRename = findViewById(R.id.tvMultiRename);
+        View layoutMultiDelete = findViewById(R.id.layoutMultiDelete);
+        View layoutMultiRename = findViewById(R.id.layoutMultiRename);
+
+        int redColor = ContextCompat.getColor(this, R.color.colorRed);
+        int primaryColor = ThemeHelper.getPrimaryColor(this);
+        ImageViewCompat.setImageTintList(btnMultiDelete, ColorStateList.valueOf(redColor));
+        if (tvMultiDelete != null) tvMultiDelete.setTextColor(redColor);
+        ImageViewCompat.setImageTintList(btnMultiRename, ColorStateList.valueOf(primaryColor));
+        if (tvMultiRename != null) tvMultiRename.setTextColor(primaryColor);
+
+        View.OnClickListener deleteClick = v -> handleBatchDelete();
+        btnMultiDelete.setOnClickListener(deleteClick);
+        if (layoutMultiDelete != null) layoutMultiDelete.setOnClickListener(deleteClick);
+
+        View.OnClickListener renameClick = v -> handleBatchRename();
+        btnMultiRename.setOnClickListener(renameClick);
+        if (layoutMultiRename != null) layoutMultiRename.setOnClickListener(renameClick);
 
         adapter = new AlbumAdapter(this, this, this);
         adapter.setOnMultiSelectListener(this);
@@ -97,7 +119,7 @@ public class WorkspaceActivity extends AppCompatActivity
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int position) {
-                if (adapter.isDividerPosition(position)) {
+                if (adapter.isDividerPosition(position) || adapter.isEmptyPosition(position)) {
                     return 3;
                 }
                 return 1;
@@ -125,12 +147,12 @@ public class WorkspaceActivity extends AppCompatActivity
     }
 
     private void loadAlbums() {
-        List<Album> albums = FileUtils.getAlbums(workspaceName);
+        List<Album> albums = FileUtils.getAlbums(workspaceName, isOnline);
         currentSortMode = SortHelper.getAlbumSortMode(this, workspaceName);
 
         for (Album album : albums) {
             album.setCoverPath(null);
-            album.setHasPhotos(FileUtils.hasPhotos(workspaceName, album.getName()));
+            album.setHasPhotos(FileUtils.hasPhotos(workspaceName, album.getName(), isOnline));
         }
 
         switch (currentSortMode) {
@@ -169,7 +191,7 @@ public class WorkspaceActivity extends AppCompatActivity
         executor.execute(() -> {
             for (Album album : albums) {
                 if (album.isHasPhotos()) {
-                    Photo cover = FileUtils.getMostRecentPhoto(workspaceName, album.getName());
+                    Photo cover = FileUtils.getMostRecentPhoto(workspaceName, album.getName(), isOnline);
                     final String albumName = album.getName();
                     final String coverPath = cover != null ? cover.getAbsolutePath() : null;
                     mainHandler.post(() -> {
@@ -278,7 +300,7 @@ public class WorkspaceActivity extends AppCompatActivity
             .setPositiveButton(R.string.btn_confirm, (dialog, which) -> {
                 int successCount = 0;
                 for (String name : selected) {
-                    if (FileUtils.deleteAlbum(workspaceName, name)) {
+                    if (FileUtils.deleteAlbum(workspaceName, name, isOnline)) {
                         successCount++;
                     }
                 }
@@ -308,6 +330,7 @@ public class WorkspaceActivity extends AppCompatActivity
         Intent intent = new Intent(this, AlbumActivity.class);
         intent.putExtra(AlbumActivity.EXTRA_WORKSPACE_NAME, workspaceName);
         intent.putExtra(AlbumActivity.EXTRA_ALBUM_NAME, album.getName());
+        intent.putExtra(AlbumActivity.EXTRA_IS_ONLINE, isOnline);
         startActivity(intent);
     }
 
@@ -320,6 +343,7 @@ public class WorkspaceActivity extends AppCompatActivity
     public void onImportClick() {
         Intent intent = new Intent(this, ImportActivity.class);
         intent.putExtra(EXTRA_WORKSPACE_NAME, workspaceName);
+        intent.putExtra(ImportActivity.EXTRA_IS_ONLINE, isOnline);
         startActivity(intent);
     }
 
@@ -371,7 +395,7 @@ public class WorkspaceActivity extends AppCompatActivity
             if (newName.trim().isEmpty() || newName.equals(originalName)) {
                 return;
             }
-            boolean success = FileUtils.renameAlbum(workspaceName, originalName, newName);
+            boolean success = FileUtils.renameAlbum(workspaceName, originalName, newName, isOnline);
             if (success) {
                 dialog.dismiss();
                 adapter.exitMultiSelectMode();
@@ -421,7 +445,7 @@ public class WorkspaceActivity extends AppCompatActivity
             if (name.isEmpty() || name.contains(" ")) {
                 return;
             }
-            FileUtils.createAlbum(workspaceName, name);
+            FileUtils.createAlbum(workspaceName, name, isOnline);
             dialog.dismiss();
             loadAlbums();
         });

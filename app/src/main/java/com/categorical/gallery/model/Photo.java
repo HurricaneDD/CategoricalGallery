@@ -1,5 +1,7 @@
 package com.categorical.gallery.model;
 
+import com.categorical.gallery.util.FileUtils;
+
 import java.io.File;
 
 public class Photo {
@@ -7,6 +9,7 @@ public class Photo {
     private String name;
     private long lastModified;
     private boolean pinned;
+    private long duration = -1;
 
     public Photo(File file) {
         this.file = file;
@@ -49,5 +52,28 @@ public class Photo {
 
     public String getAbsolutePath() {
         return file.getAbsolutePath();
+    }
+
+    public boolean isVideo() {
+        return FileUtils.isVideoFile(file);
+    }
+
+    public long getDuration() {
+        if (duration < 0) {
+            if (isVideo()) {
+                duration = FileUtils.getVideoDuration(file);
+            } else {
+                duration = 0;
+            }
+        }
+        return duration;
+    }
+
+    public void setDuration(long duration) {
+        this.duration = duration;
+    }
+
+    public String getFormattedDuration() {
+        return FileUtils.formatDuration(getDuration());
     }
 }

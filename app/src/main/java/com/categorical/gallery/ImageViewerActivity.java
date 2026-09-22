@@ -1,16 +1,23 @@
 package com.categorical.gallery;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.MediaMetadataRetriever;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -228,10 +235,11 @@ public class ImageViewerActivity extends AppCompatActivity {
             Uri uri = FileProvider.getUriForFile(this,
                     getPackageName() + ".fileprovider", photo.getFile());
             Intent intent = new Intent(Intent.ACTION_SEND);
-            intent.setType("image/*");
+            intent.setType(photo.isVideo() ? "video/*" : "image/*");
             intent.putExtra(Intent.EXTRA_STREAM, uri);
             intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
-            startActivity(Intent.createChooser(intent, getString(R.string.share_chooser_title)));
+            String chooserTitle = photo.isVideo() ? getString(R.string.action_share_video) : getString(R.string.share_chooser_title);
+            startActivity(Intent.createChooser(intent, chooserTitle));
         } catch (Exception e) {
             Toast.makeText(this, R.string.share_failed_toast, Toast.LENGTH_SHORT).show();
         }
@@ -287,7 +295,24 @@ public class ImageViewerActivity extends AppCompatActivity {
         TextView tvDimensions = view.findViewById(R.id.tv_detail_dimensions);
         Button btnConfirm = view.findViewById(R.id.btn_detail_confirm);
 
-        int[] dims = FileUtils.getImageDimensions(file);
+        int[] dims;
+        if (photo.isVideo()) {
+            MediaMetadataRetriever retriever = new MediaMetadataRetriever();
+            int w = 0, h = 0;
+            try {
+                retriever.setDataSource(file.getAbsolutePath());
+                String wStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_WIDTH);
+                String hStr = retriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_VIDEO_HEIGHT);
+                if (wStr != null) w = Integer.parseInt(wStr);
+                if (hStr != null) h = Integer.parseInt(hStr);
+            } catch (Throwable ignored) {
+            } finally {
+                try { retriever.release(); } catch (Throwable ignored) {}
+            }
+            dims = new int[]{w, h};
+        } else {
+            dims = FileUtils.getImageDimensions(file);
+        }
         File parent = file.getParentFile();
         String dirPath = parent != null ? parent.getAbsolutePath() : "";
 
@@ -298,7 +323,12 @@ public class ImageViewerActivity extends AppCompatActivity {
                 FileUtils.formatDate(getCreatedTime(file))));
         tvDirectory.setText(getString(R.string.detail_directory, dirPath));
         tvSize.setText(getString(R.string.detail_size, FileUtils.formatFileSize(file.length())));
-        tvDimensions.setText(getString(R.string.detail_dimensions, dims[0], dims[1]));
+        if (photo.isVideo()) {
+            tvDimensions.setText(getString(R.string.video_duration_format, photo.getFormattedDuration())
+                    + (dims[0] > 0 ? "  |  " + dims[0] + " x " + dims[1] : ""));
+        } else {
+            tvDimensions.setText(getString(R.string.detail_dimensions, dims[0], dims[1]));
+        }
 
         AlertDialog dialog = new AlertDialog.Builder(this)
                 .setView(view)
@@ -453,21 +483,81 @@ public class ImageViewerActivity extends AppCompatActivity {
         @NonNull
         @Override
         public PhotoViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            PhotoView photoView = new PhotoView(parent.getContext());
-            photoView.setLayoutParams(new ViewGroup.LayoutParams(
+            Context context = parent.getContext();
+            FrameLayout frameLayout = new FrameLayout(context);
+            frameLayout.setLayoutParams(new ViewGroup.LayoutParams(
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.MATCH_PARENT));
+
+            PhotoView photoView = new PhotoView(context);
+            photoView.setLayoutParams(new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.MATCH_PARENT,
+                    FrameLayout.LayoutParams.MATCH_PARENT));
             photoView.setAdjustViewBounds(true);
-            return new PhotoViewHolder(photoView);
+            frameLayout.addView(photoView);
+
+            // Video overlay with play icon and duration
+            LinearLayout videoOverlay = new LinearLayout(context);
+            FrameLayout.LayoutParams overlayParams = new FrameLayout.LayoutParams(
+                    FrameLayout.LayoutParams.WRAP_CONTENT,
+                    FrameLayout.LayoutParams.WRAP_CONTENT);
+            overlayParams.gravity = Gravity.CENTER;
+            videoOverlay.setLayoutParams(overlayParams);
+            videoOverlay.setOrientation(LinearLayout.VERTICAL);
+            videoOverlay.setGravity(Gravity.CENTER);
+            videoOverlay.setVisibility(View.GONE);
+
+            ImageView playIcon = new ImageView(context);
+            int playSize = (int) (64 * context.getResources().getDisplayMetrics().density);
+            LinearLayout.LayoutParams playParams = new LinearLayout.LayoutParams(playSize, playSize);
+            playIcon.setLayoutParams(playParams);
+            playIcon.setBackgroundResource(R.drawable.bg_play_circle);
+            playIcon.setImageResource(R.drawable.ic_play_arrow);
+            int pad = (int) (16 * context.getResources().getDisplayMetrics().density);
+            playIcon.setPadding(pad, pad, pad, pad);
+            playIcon.setColorFilter(Color.WHITE);
+            videoOverlay.addView(playIcon);
+
+            TextView tvDuration = new TextView(context);
+            LinearLayout.LayoutParams durParams = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT,
+                    LinearLayout.LayoutParams.WRAP_CONTENT);
+            durParams.topMargin = (int) (8 * context.getResources().getDisplayMetrics().density);
+            tvDuration.setLayoutParams(durParams);
+            tvDuration.setTextColor(Color.WHITE);
+            tvDuration.setTextSize(14f);
+            tvDuration.setBackgroundResource(R.drawable.bg_video_duration_badge);
+            int padH = (int) (8 * context.getResources().getDisplayMetrics().density);
+            int padV = (int) (4 * context.getResources().getDisplayMetrics().density);
+            tvDuration.setPadding(padH, padV, padH, padV);
+            videoOverlay.addView(tvDuration);
+
+            frameLayout.addView(videoOverlay);
+
+            return new PhotoViewHolder(frameLayout, photoView, videoOverlay, tvDuration);
         }
 
         @Override
         public void onBindViewHolder(@NonNull PhotoViewHolder holder, int position) {
             Photo photo = photoList.get(position);
-            Glide.with(holder.photoView.getContext())
+            Context context = holder.photoView.getContext();
+            Glide.with(context)
                     .load(photo.getFile())
                     .fitCenter()
                     .into(holder.photoView);
+
+            if (photo.isVideo()) {
+                holder.videoOverlay.setVisibility(View.VISIBLE);
+                holder.tvDuration.setText(photo.getFormattedDuration());
+                View.OnClickListener playListener = v -> {
+                    VideoPlayerActivity.start(context, photo.getAbsolutePath(), photo.getName());
+                };
+                holder.videoOverlay.setOnClickListener(playListener);
+                holder.photoView.setOnClickListener(playListener);
+            } else {
+                holder.videoOverlay.setVisibility(View.GONE);
+                holder.photoView.setOnClickListener(null);
+            }
         }
 
         @Override
@@ -477,10 +567,14 @@ public class ImageViewerActivity extends AppCompatActivity {
 
         static class PhotoViewHolder extends RecyclerView.ViewHolder {
             final PhotoView photoView;
+            final View videoOverlay;
+            final TextView tvDuration;
 
-            PhotoViewHolder(@NonNull View itemView) {
+            PhotoViewHolder(@NonNull View itemView, PhotoView photoView, View videoOverlay, TextView tvDuration) {
                 super(itemView);
-                photoView = (PhotoView) itemView;
+                this.photoView = photoView;
+                this.videoOverlay = videoOverlay;
+                this.tvDuration = tvDuration;
             }
         }
     }

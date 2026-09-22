@@ -117,7 +117,11 @@ public class PhotoSelectActivity extends AppCompatActivity {
                 break;
             case LEVEL_PHOTO:
             default:
-                items.addAll(FileUtils.getPhotos(this, currentWorkspaceName, currentAlbumName));
+                for (Photo p : FileUtils.getPhotos(this, currentWorkspaceName, currentAlbumName)) {
+                    if (!p.isVideo()) {
+                        items.add(p);
+                    }
+                }
                 recyclerView.setLayoutManager(new GridLayoutManager(this, 3));
                 break;
         }

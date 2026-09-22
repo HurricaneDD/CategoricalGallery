@@ -43,35 +43,84 @@
         android:id="@+id/bottomToolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorSurface"
+        android:background="@drawable/bg_bottom_toolbar"
         android:elevation="8dp"
         android:gravity="center"
         android:orientation="horizontal"
-        android:padding="12dp"
+        android:paddingTop="6dp"
+        android:paddingBottom="6dp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageButton
-            android:id="@+id/btnMultiDelete"
+        <LinearLayout
+            android:id="@+id/layoutMultiDelete"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="删除"
-            android:padding="12dp"
-            android:src="@drawable/ic_delete" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="6dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
 
-        <ImageButton
-            android:id="@+id/btnMultiRename"
+            <ImageButton
+                android:id="@+id/btnMultiDelete"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:contentDescription="删除"
+                android:duplicateParentState="true"
+                android:clickable="false"
+                app:tint="@color/colorTextPrimary"
+                android:src="@drawable/ic_delete" />
+
+            <TextView
+                android:id="@+id/tvMultiDelete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="删除"
+                android:textSize="12sp"
+                android:textColor="@color/colorTextPrimary" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutMultiRename"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="重命名"
-            android:padding="12dp"
-            android:src="@drawable/ic_edit" />
+            android:orientation="vertical"
+            android:gravity="center"
+            android:padding="6dp"
+            android:clickable="true"
+            android:focusable="true"
+            android:background="?attr/selectableItemBackground">
+
+            <ImageButton
+                android:id="@+id/btnMultiRename"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:background="@null"
+                android:contentDescription="重命名"
+                android:duplicateParentState="true"
+                android:clickable="false"
+                app:tint="@color/colorTextPrimary"
+                android:src="@drawable/ic_edit" />
+
+            <TextView
+                android:id="@+id/tvMultiRename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:text="重命名"
+                android:textSize="12sp"
+                android:textColor="@color/colorTextPrimary" />
+
+        </LinearLayout>
 
     </LinearLayout>
 

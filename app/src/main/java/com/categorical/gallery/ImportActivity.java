@@ -42,6 +42,7 @@ import java.util.List;
 public class ImportActivity extends AppCompatActivity implements SystemAlbumAdapter.OnAlbumSelectedListener {
 
     public static final String EXTRA_WORKSPACE_NAME = "workspaceName";
+    public static final String EXTRA_IS_ONLINE = "isOnline";
 
     private static final int STATE_SELECT_ALBUM = 0;
     private static final int STATE_SELECT_MODE = 1;
@@ -63,6 +64,7 @@ public class ImportActivity extends AppCompatActivity implements SystemAlbumAdap
     private Button btnFinishExit;
 
     private String workspaceName;
+    private boolean isOnline = false;
     private final List<SystemAlbum> systemAlbums = new ArrayList<>();
     private SystemAlbumAdapter adapter;
     private SystemAlbum selectedAlbum;
@@ -77,6 +79,7 @@ public class ImportActivity extends AppCompatActivity implements SystemAlbumAdap
         setContentView(R.layout.activity_import);
 
         workspaceName = getIntent().getStringExtra(EXTRA_WORKSPACE_NAME);
+        isOnline = getIntent().getBooleanExtra(EXTRA_IS_ONLINE, false);
         if (workspaceName == null || workspaceName.isEmpty()) {
             workspaceName = getString(R.string.default_workspace_name);
         }
@@ -191,7 +194,7 @@ public class ImportActivity extends AppCompatActivity implements SystemAlbumAdap
         final List<Uri> copiedUris = new ArrayList<>();
 
         new Thread(() -> {
-            File albumDir = FileUtils.getAlbumDir(workspaceName, albumName);
+            File albumDir = FileUtils.getAlbumDir(workspaceName, albumName, isOnline);
             if (!albumDir.exists() && !albumDir.mkdirs()) {
                 runOnUiThread(this::showComplete);
                 return;

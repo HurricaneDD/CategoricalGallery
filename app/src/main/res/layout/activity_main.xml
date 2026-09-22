@@ -21,30 +21,137 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="4dp"
-            android:text="@string/toolbar_workspace"
+            android:text="@string/toolbar_local_workspace"
             android:textColor="@color/white"
             android:textSize="20sp" />
 
-        <ImageButton
-            android:id="@+id/btnSort"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_gravity="end|center_vertical"
-            android:layout_marginEnd="4dp"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="排序"
-            android:src="@drawable/ic_sort" />
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
 
-        <ImageButton
-            android:id="@+id/btnSettings"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_gravity="end|center_vertical"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="设置"
-            android:src="@drawable/ic_settings" />
+            <ImageButton
+                android:id="@+id/btnSync"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/tab_sync"
+                android:visibility="gone"
+                android:src="@drawable/ic_sync" />
+
+            <ImageButton
+                android:id="@+id/btnCloud"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="配置SFTP服务器"
+                android:visibility="gone"
+                android:src="@drawable/ic_cloud" />
+
+            <ImageButton
+                android:id="@+id/btnSort"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="排序"
+                android:src="@drawable/ic_sort" />
+
+            <ImageButton
+                android:id="@+id/btnSettings"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="设置"
+                android:src="@drawable/ic_settings" />
+
+        </LinearLayout>
 
     </androidx.appcompat.widget.Toolbar>
+
+    <!-- Top Sync Info Banner (under toolbar) -->
+    <LinearLayout
+        android:id="@+id/layoutSyncBanner"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorSurface"
+        android:orientation="vertical"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:visibility="gone"
+        app:layout_constraintTop_toBottomOf="@id/toolbar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/ivSyncStatus"
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_marginEnd="8dp"
+                android:scaleType="centerInside"
+                android:src="@drawable/ic_sync"
+                app:tint="@color/colorTextSecondary" />
+
+            <TextView
+                android:id="@+id/tvSyncTime"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="最近同步时间：\n尚未同步"
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="12sp"
+                android:lineSpacingExtra="2dp" />
+
+            <TextView
+                android:id="@+id/tvSftpStatusBadge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="● SFTP在线"
+                android:textColor="@color/colorGreen"
+                android:textSize="11sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/layoutSyncProgress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="6dp"
+            android:visibility="gone">
+
+            <ProgressBar
+                android:id="@+id/pbSyncProgress"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="match_parent"
+                android:layout_height="4dp"
+                android:max="100"
+                android:progress="0"
+                android:progressTint="@color/colorPrimary" />
+
+            <TextView
+                android:id="@+id/tvSyncEstimateTime"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp"
+                android:text="预计时间：计算中..."
+                android:textColor="@color/colorTextSecondary"
+                android:textSize="11sp" />
+
+        </LinearLayout>
+
+    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
@@ -52,45 +159,178 @@
         android:layout_height="0dp"
         android:clipToPadding="false"
         android:padding="4dp"
-        app:layout_constraintTop_toBottomOf="@id/toolbar"
-        app:layout_constraintBottom_toTopOf="@id/bottomToolbar"
+        app:layout_constraintTop_toBottomOf="@id/layoutSyncBanner"
+        app:layout_constraintBottom_toTopOf="@id/bottomContainer"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <LinearLayout
-        android:id="@+id/bottomToolbar"
+    <!-- Bottom Container holding Bottom Navigation and Multi-Select Toolbar -->
+    <FrameLayout
+        android:id="@+id/bottomContainer"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/colorSurface"
-        android:elevation="8dp"
-        android:gravity="center"
-        android:orientation="horizontal"
-        android:padding="12dp"
-        android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <ImageButton
-            android:id="@+id/btnMultiDelete"
-            android:layout_width="0dp"
+        <!-- Bottom Navigation Bar -->
+        <LinearLayout
+            android:id="@+id/layoutBottomNavigation"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="删除"
-            android:padding="12dp"
-            android:src="@drawable/ic_delete" />
+            android:background="@drawable/bg_bottom_toolbar"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp">
 
-        <ImageButton
-            android:id="@+id/btnMultiRename"
-            android:layout_width="0dp"
+            <!-- Local Workspace Tab -->
+            <LinearLayout
+                android:id="@+id/tabLocalWorkspace"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/ivTabLocal"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_local"
+                    app:tint="@color/colorPrimary" />
+
+                <TextView
+                    android:id="@+id/tvTabLocal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/tab_local_workspace"
+                    android:textSize="12sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorPrimary" />
+            </LinearLayout>
+
+            <!-- Online Workspace Tab -->
+            <LinearLayout
+                android:id="@+id/tabOnlineWorkspace"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageView
+                    android:id="@+id/ivTabOnline"
+                    android:layout_width="24dp"
+                    android:layout_height="24dp"
+                    android:src="@drawable/ic_online"
+                    app:tint="@color/colorTextSecondary" />
+
+                <TextView
+                    android:id="@+id/tvTabOnline"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="@string/tab_online_workspace"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextSecondary" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <!-- Multi-select Bottom Toolbar -->
+        <LinearLayout
+            android:id="@+id/bottomToolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="?attr/selectableItemBackgroundBorderless"
-            android:contentDescription="重命名"
-            android:padding="12dp"
-            android:src="@drawable/ic_edit" />
+            android:background="@drawable/bg_bottom_toolbar"
+            android:elevation="8dp"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:paddingTop="6dp"
+            android:paddingBottom="6dp"
+            android:visibility="gone">
 
-    </LinearLayout>
+            <LinearLayout
+                android:id="@+id/layoutMultiDelete"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageButton
+                    android:id="@+id/btnMultiDelete"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@null"
+                    android:contentDescription="删除"
+                    android:duplicateParentState="true"
+                    android:clickable="false"
+                    app:tint="@color/colorTextPrimary"
+                    android:src="@drawable/ic_delete" />
+
+                <TextView
+                    android:id="@+id/tvMultiDelete"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="删除"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextPrimary" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutMultiRename"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="vertical"
+                android:gravity="center"
+                android:padding="6dp"
+                android:clickable="true"
+                android:focusable="true"
+                android:background="?attr/selectableItemBackground">
+
+                <ImageButton
+                    android:id="@+id/btnMultiRename"
+                    android:layout_width="32dp"
+                    android:layout_height="32dp"
+                    android:background="@null"
+                    android:contentDescription="重命名"
+                    android:duplicateParentState="true"
+                    android:clickable="false"
+                    app:tint="@color/colorTextPrimary"
+                    android:src="@drawable/ic_edit" />
+
+                <TextView
+                    android:id="@+id/tvMultiRename"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="2dp"
+                    android:text="重命名"
+                    android:textSize="12sp"
+                    android:textColor="@color/colorTextPrimary" />
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

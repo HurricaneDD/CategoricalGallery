@@ -3,8 +3,15 @@
     <string name="app_name">分类相册</string>
 
     <!-- Workspace Selection -->
-    <string name="toolbar_workspace">我的工作区</string>
+    <string name="toolbar_workspace">本地工作区</string>
+    <string name="toolbar_local_workspace">本地工作区</string>
+    <string name="toolbar_online_workspace">在线工作区</string>
+    <string name="tab_local_workspace">本地工作区</string>
+    <string name="tab_online_workspace">在线工作区</string>
+    <string name="tab_sync">同步</string>
     <string name="default_workspace_name">暂未归入</string>
+    <string name="no_workspaces">暂无工作区</string>
+    <string name="no_albums">暂无相册</string>
     <string name="empty_text">空</string>
 
     <!-- Dialogs -->
@@ -79,4 +86,18 @@
     <!-- Permissions -->
     <string name="permission_denied">需要存储权限才能使用此功能</string>
     <string name="permission_rationale">需要存储权限来读取和写入相册照片</string>
+    <string name="permission_dialog_title">存储管理权限申请</string>
+    <string name="permission_dialog_message">分类相册需要访问存储设备中的工作区与照片文件（如 /sdcard/Download/.CategoricalGallery）。为确保旧版及外部遗留的照片和相册能正常显示，请在系统设置中允许“所有文件访问权限”。</string>
+    <string name="permission_dialog_btn_grant">前往授权</string>
+
+    <!-- Video Player & Import -->
+    <string name="video_player_title">视频播放</string>
+    <string name="import_media_title">选择导入类型</string>
+    <string name="import_type_photos">导入图片</string>
+    <string name="import_type_videos">导入视频</string>
+    <string name="import_type_all">图片与视频</string>
+    <string name="video_error_cannot_play">无法播放此视频</string>
+    <string name="video_info_title">视频详情</string>
+    <string name="video_duration_format">时长：%1$s</string>
+    <string name="action_share_video">分享视频</string>
 </resources>

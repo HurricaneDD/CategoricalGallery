@@ -30,6 +30,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public static final int TYPE_ADD = 1;
     public static final int TYPE_IMPORT = 2;
     public static final int TYPE_DIVIDER = 3;
+    public static final int TYPE_EMPTY = 4;
 
     private static final String PAYLOAD_SELECTION = "selection";
 
@@ -100,22 +101,38 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         this.multiSelectListener = listener;
     }
 
+    public boolean isEmptyPosition(int position) {
+        return albums.isEmpty() && position == 0;
+    }
+
     public boolean isDividerPosition(int position) {
-        return position == albums.size();
+        return position == getDividerPos();
+    }
+
+    private int getDividerPos() {
+        return albums.isEmpty() ? 1 : albums.size();
+    }
+
+    private int getAddPos() {
+        return getDividerPos() + 1;
+    }
+
+    private int getImportPos() {
+        return getDividerPos() + 2;
     }
 
     @Override
     public int getItemViewType(int position) {
-        int albumCount = albums.size();
-        if (position < albumCount) return TYPE_ALBUM;
-        if (position == albumCount) return TYPE_DIVIDER;
-        if (position == albumCount + 1) return TYPE_ADD;
-        return TYPE_IMPORT;
+        if (isEmptyPosition(position)) return TYPE_EMPTY;
+        if (position == getDividerPos()) return TYPE_DIVIDER;
+        if (position == getAddPos()) return TYPE_ADD;
+        if (position == getImportPos()) return TYPE_IMPORT;
+        return TYPE_ALBUM;
     }
 
     @Override
     public int getItemCount() {
-        return albums.size() + 3;
+        return (albums.isEmpty() ? 1 : albums.size()) + 3;
     }
 
     public void attachToRecyclerView(RecyclerView recyclerView) {
@@ -178,6 +195,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        if (viewType == TYPE_EMPTY) {
+            View view = inflater.inflate(R.layout.item_empty_album, parent, false);
+            return new EmptyViewHolder(view);
+        }
         if (viewType == TYPE_DIVIDER) {
             View view = inflater.inflate(R.layout.item_divider, parent, false);
             return new DividerViewHolder(view);
@@ -189,7 +210,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         int viewType = getItemViewType(position);
-        if (viewType == TYPE_DIVIDER) return;
+        if (viewType == TYPE_EMPTY || viewType == TYPE_DIVIDER) return;
         if (viewType == TYPE_ADD) {
             bindAdd((AlbumViewHolder) holder);
         } else if (viewType == TYPE_IMPORT) {
@@ -376,6 +397,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     static class DividerViewHolder extends RecyclerView.ViewHolder {
         DividerViewHolder(View itemView) {
             super(itemView);
+        }
+    }
+
+    static class EmptyViewHolder extends RecyclerView.ViewHolder {
+        final TextView tvEmptyAlbum;
+        EmptyViewHolder(@NonNull View itemView) {
+            super(itemView);
+            tvEmptyAlbum = itemView.findViewById(R.id.tvEmptyAlbum);
         }
     }
 }

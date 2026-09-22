@@ -67,6 +67,7 @@
             android:background="?attr/selectableItemBackgroundBorderless"
             android:contentDescription="@string/dialog_delete_title"
             android:padding="12dp"
+            app:tint="@color/white"
             android:src="@drawable/ic_delete" />
 
         <ImageButton

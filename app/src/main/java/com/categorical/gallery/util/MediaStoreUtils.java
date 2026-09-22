@@ -97,6 +97,67 @@ public class MediaStoreUtils {
             Log.e(TAG, "Failed to query system albums", e);
         }
 
+        // Query system video albums
+        String[] videoProjection;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+            videoProjection = new String[]{
+                    MediaStore.Video.Media._ID,
+                    MediaStore.Video.Media.BUCKET_ID,
+                    MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+                    MediaStore.Video.Media.DATE_TAKEN,
+                    MediaStore.Video.Media.DISPLAY_NAME
+            };
+        } else {
+            videoProjection = new String[]{
+                    MediaStore.Video.Media._ID,
+                    MediaStore.Video.Media.BUCKET_ID,
+                    MediaStore.Video.Media.BUCKET_DISPLAY_NAME,
+                    MediaStore.Video.Media.DATE_TAKEN,
+                    MediaStore.Video.Media.DISPLAY_NAME,
+                    MediaStore.Video.Media.DATA
+            };
+        }
+
+        try (Cursor cursor = context.getContentResolver().query(
+                MediaStore.Video.Media.EXTERNAL_CONTENT_URI,
+                videoProjection,
+                null,
+                null,
+                MediaStore.Video.Media.DATE_TAKEN + " DESC")) {
+
+            if (cursor != null && cursor.moveToFirst()) {
+                int bucketIdIndex = cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_ID);
+                int bucketNameIndex = cursor.getColumnIndex(MediaStore.Video.Media.BUCKET_DISPLAY_NAME);
+                int idIndex = cursor.getColumnIndex(MediaStore.Video.Media._ID);
+
+                do {
+                    long bucketId = cursor.getLong(bucketIdIndex);
+                    String bucketName = cursor.getString(bucketNameIndex);
+                    if (bucketName == null) bucketName = "未命名相册";
+
+                    String key = String.valueOf(bucketId);
+                    SystemAlbum album = albumMap.get(key);
+                    if (album == null) {
+                        album = new SystemAlbum(bucketId, bucketName);
+                        albumMap.put(key, album);
+                        albums.add(album);
+                    }
+
+                    long videoId = cursor.getLong(idIndex);
+                    Uri videoUri = ContentUris.withAppendedId(
+                            MediaStore.Video.Media.EXTERNAL_CONTENT_URI, videoId);
+                    album.addPhotoUri(videoUri.toString());
+
+                    if (album.getCoverUri() == null) {
+                        album.setCoverUri(videoUri.toString());
+                    }
+                    album.setPhotoCount(album.getPhotoCount() + 1);
+                } while (cursor.moveToNext());
+            }
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to query system video albums", e);
+        }
+
         return albums;
     }
 
@@ -155,16 +216,18 @@ public class MediaStoreUtils {
      * Export a photo file to the system gallery (DCIM/Camera or Pictures).
      */
     public static boolean exportPhotoToSystemGallery(Context context, File photoFile) {
+        boolean isVideo = FileUtils.isVideoFile(photoFile);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Use MediaStore insertion for Android 10+
             ContentValues values = new ContentValues();
-            values.put(MediaStore.Images.Media.DISPLAY_NAME, photoFile.getName());
-            values.put(MediaStore.Images.Media.MIME_TYPE, "image/jpeg");
-            values.put(MediaStore.Images.Media.RELATIVE_PATH, Environment.DIRECTORY_PICTURES + "/分类相册导出");
-            values.put(MediaStore.Images.Media.IS_PENDING, 1);
+            values.put(MediaStore.MediaColumns.DISPLAY_NAME, photoFile.getName());
+            values.put(MediaStore.MediaColumns.MIME_TYPE, isVideo ? "video/mp4" : "image/jpeg");
+            values.put(MediaStore.MediaColumns.RELATIVE_PATH,
+                    (isVideo ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES) + "/分类相册导出");
+            values.put(MediaStore.MediaColumns.IS_PENDING, 1);
 
             ContentResolver resolver = context.getContentResolver();
-            Uri uri = resolver.insert(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            Uri targetCollection = isVideo ? MediaStore.Video.Media.EXTERNAL_CONTENT_URI : MediaStore.Images.Media.EXTERNAL_CONTENT_URI;
+            Uri uri = resolver.insert(targetCollection, values);
             if (uri == null) return false;
 
             try (OutputStream out = resolver.openOutputStream(uri);
@@ -175,7 +238,7 @@ public class MediaStoreUtils {
                     out.write(buffer, 0, length);
                 }
                 values.clear();
-                values.put(MediaStore.Images.Media.IS_PENDING, 0);
+                values.put(MediaStore.MediaColumns.IS_PENDING, 0);
                 resolver.update(uri, values, null, null);
                 return true;
             } catch (IOException e) {
@@ -184,9 +247,10 @@ public class MediaStoreUtils {
                 return false;
             }
         } else {
-            // For older Android, copy to DCIM directory
-            File dcimDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
-            File exportDir = new File(dcimDir, "分类相册导出");
+            // For older Android, copy to public directory
+            File targetDir = Environment.getExternalStoragePublicDirectory(
+                    isVideo ? Environment.DIRECTORY_MOVIES : Environment.DIRECTORY_PICTURES);
+            File exportDir = new File(targetDir, "分类相册导出");
             if (!exportDir.exists()) exportDir.mkdirs();
             File destFile = new File(exportDir, photoFile.getName());
             try {

@@ -86,6 +86,7 @@ public class ThemeHelper {
         int primary = getPrimaryColor(activity);
         int primaryDark = getPrimaryDarkColor(activity);
         toolbar.setBackgroundColor(primary);
+        toolbar.setTitleTextColor(ContextCompat.getColor(activity, R.color.white));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             activity.getWindow().setStatusBarColor(primaryDark);
         }

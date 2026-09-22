@@ -1,14 +1,18 @@
 package com.categorical.gallery;
 
+import android.content.res.ColorStateList;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
+import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
+import androidx.core.widget.CompoundButtonCompat;
 
 import com.categorical.gallery.util.ThemeHelper;
 
@@ -60,10 +64,34 @@ public class SettingsActivity extends AppCompatActivity {
 
         updateColorSelection();
 
+        TextView tvThemeTitle = findViewById(R.id.tvThemeTitle);
+        TextView tvDarkModeTitle = findViewById(R.id.tvDarkModeTitle);
         RadioGroup rgDarkMode = findViewById(R.id.rgDarkMode);
         RadioButton rbFollowSystem = findViewById(R.id.rbFollowSystem);
         RadioButton rbLight = findViewById(R.id.rbLight);
         RadioButton rbDark = findViewById(R.id.rbDark);
+
+        int textPrimary = ContextCompat.getColor(this, R.color.colorTextPrimary);
+        if (tvThemeTitle != null) tvThemeTitle.setTextColor(textPrimary);
+        if (tvDarkModeTitle != null) tvDarkModeTitle.setTextColor(textPrimary);
+        rbFollowSystem.setTextColor(textPrimary);
+        rbLight.setTextColor(textPrimary);
+        rbDark.setTextColor(textPrimary);
+
+        int primaryColor = ThemeHelper.getPrimaryColor(this);
+        ColorStateList buttonTint = new ColorStateList(
+                new int[][]{
+                        new int[]{android.R.attr.state_checked},
+                        new int[]{-android.R.attr.state_checked}
+                },
+                new int[]{
+                        primaryColor,
+                        ContextCompat.getColor(this, R.color.colorTextSecondary)
+                }
+        );
+        CompoundButtonCompat.setButtonTintList(rbFollowSystem, buttonTint);
+        CompoundButtonCompat.setButtonTintList(rbLight, buttonTint);
+        CompoundButtonCompat.setButtonTintList(rbDark, buttonTint);
 
         int darkMode = ThemeHelper.getDarkMode(this);
         switch (darkMode) {
@@ -86,7 +114,12 @@ public class SettingsActivity extends AppCompatActivity {
             } else if (checkedId == R.id.rbDark) {
                 ThemeHelper.setDarkMode(this, ThemeHelper.MODE_DARK);
             }
+            recreate();
         });
+    }
+
+    private int dpToPx(int dp) {
+        return (int) (dp * getResources().getDisplayMetrics().density + 0.5f);
     }
 
     private int getThemeColorValue(int index) {
@@ -104,23 +137,25 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void setColorViewBackground(View view, int color) {
-        android.graphics.drawable.GradientDrawable drawable =
-                (android.graphics.drawable.GradientDrawable) view.getBackground();
+        GradientDrawable drawable = (GradientDrawable) view.getBackground().mutate();
         drawable.setColor(color);
     }
 
     private void updateColorSelection() {
         int currentColor = ThemeHelper.getThemeColor(this);
         for (int i = 0; i < colorViews.length; i++) {
+            GradientDrawable drawable = (GradientDrawable) colorViews[i].getBackground().mutate();
             if (colorValues[i] == currentColor) {
                 selectedColorIndex = i;
                 colorViews[i].setAlpha(1.0f);
-                colorViews[i].setScaleX(1.2f);
-                colorViews[i].setScaleY(1.2f);
-            } else {
-                colorViews[i].setAlpha(0.5f);
                 colorViews[i].setScaleX(1.0f);
                 colorViews[i].setScaleY(1.0f);
+                drawable.setStroke(dpToPx(4), ContextCompat.getColor(this, R.color.colorTextPrimary));
+            } else {
+                colorViews[i].setAlpha(0.6f);
+                colorViews[i].setScaleX(1.0f);
+                colorViews[i].setScaleY(1.0f);
+                drawable.setStroke(dpToPx(1), ContextCompat.getColor(this, R.color.colorDivider));
             }
         }
     }

@@ -38,11 +38,13 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
     public static final String EXTRA_WORKSPACE_NAME = "workspaceName";
     public static final String EXTRA_ALBUM_NAME = "albumName";
     public static final String EXTRA_POSITION = "position";
+    public static final String EXTRA_IS_ONLINE = "isOnline";
 
     private static final int REQUEST_PICK_IMAGES = 2001;
 
     private String workspaceName;
     private String albumName;
+    private boolean isOnline = false;
     private RecyclerView recyclerView;
     private PhotoAdapter adapter;
     private List<Photo> photos = new ArrayList<>();
@@ -54,6 +56,7 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
 
         workspaceName = getIntent().getStringExtra(EXTRA_WORKSPACE_NAME);
         albumName = getIntent().getStringExtra(EXTRA_ALBUM_NAME);
+        isOnline = getIntent().getBooleanExtra(EXTRA_IS_ONLINE, false);
         if (workspaceName == null || albumName == null) {
             finish();
             return;
@@ -67,6 +70,7 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
             Intent intent = new Intent(AlbumActivity.this, ExportActivity.class);
             intent.putExtra(EXTRA_WORKSPACE_NAME, workspaceName);
             intent.putExtra(EXTRA_ALBUM_NAME, albumName);
+            intent.putExtra(EXTRA_IS_ONLINE, isOnline);
             startActivity(intent);
         });
 
@@ -80,22 +84,47 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
     }
 
     private void loadPhotos() {
-        photos = FileUtils.getPhotos(this, workspaceName, albumName);
+        photos = FileUtils.getPhotos(this, workspaceName, albumName, isOnline);
         adapter.setPhotos(photos);
     }
 
     @Override
     public void onPhotoClick(int position) {
+        if (position >= 0 && position < photos.size()) {
+            Photo photo = photos.get(position);
+            if (photo.isVideo()) {
+                VideoPlayerActivity.start(this, photo.getAbsolutePath(), photo.getName());
+                return;
+            }
+        }
         Intent intent = new Intent(this, ImageViewerActivity.class);
         intent.putExtra(EXTRA_WORKSPACE_NAME, workspaceName);
         intent.putExtra(EXTRA_ALBUM_NAME, albumName);
         intent.putExtra(EXTRA_POSITION, position);
+        intent.putExtra(EXTRA_IS_ONLINE, isOnline);
         startActivity(intent);
     }
 
     @Override
     public void onAddClick() {
-        openImagePicker();
+        String[] options = new String[]{
+                getString(R.string.import_type_photos),
+                getString(R.string.import_type_videos),
+                getString(R.string.import_type_all)
+        };
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.import_media_title)
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        openMediaPicker("image/*");
+                    } else if (which == 1) {
+                        openMediaPicker("video/*");
+                    } else {
+                        openMediaPicker("*/*");
+                    }
+                })
+                .setNegativeButton(R.string.btn_cancel, null)
+                .show();
     }
 
     @Override
@@ -103,18 +132,27 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
         showDeleteDialog(position);
     }
 
-    // ==================== Image Picking ====================
+    // ==================== Media Picking ====================
 
-    private void openImagePicker() {
+    private void openMediaPicker(String mimeType) {
         Intent intent;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             intent = new Intent(MediaStore.ACTION_PICK_IMAGES);
             intent.putExtra(MediaStore.EXTRA_PICK_IMAGES_MAX, 50);
+            if (!"*/*".equals(mimeType)) {
+                intent.setType(mimeType);
+            }
         } else {
-            intent = new Intent(Intent.ACTION_PICK);
+            intent = new Intent(Intent.ACTION_GET_CONTENT);
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true);
+            intent.addCategory(Intent.CATEGORY_OPENABLE);
+            if ("*/*".equals(mimeType)) {
+                intent.setType("*/*");
+                intent.putExtra(Intent.EXTRA_MIME_TYPES, new String[]{"image/*", "video/*"});
+            } else {
+                intent.setType(mimeType);
+            }
         }
-        intent.setType("image/*");
         startActivityForResult(intent, REQUEST_PICK_IMAGES);
     }
 
@@ -144,7 +182,7 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
         pd.show();
 
         new Thread(() -> {
-            File albumDir = FileUtils.getAlbumDir(workspaceName, albumName);
+            File albumDir = FileUtils.getAlbumDir(workspaceName, albumName, isOnline);
             if (!albumDir.exists() && !albumDir.mkdirs()) {
                 runOnUiThread(() -> {
                     pd.dismiss();
@@ -156,7 +194,12 @@ public class AlbumActivity extends AppCompatActivity implements PhotoAdapter.OnP
             for (Uri uri : uris) {
                 String name = getDisplayName(uri);
                 if (name == null || name.isEmpty()) {
-                    name = "IMG_" + System.currentTimeMillis() + ".jpg";
+                    String mime = getContentResolver().getType(uri);
+                    if (mime != null && mime.startsWith("video/")) {
+                        name = "VID_" + System.currentTimeMillis() + ".mp4";
+                    } else {
+                        name = "IMG_" + System.currentTimeMillis() + ".jpg";
+                    }
                 }
                 File dest = ensureUnique(new File(albumDir, name));
                 if (MediaStoreUtils.copyPhotoToAppDir(this, uri, dest)) {
