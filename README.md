@@ -14,6 +14,12 @@
 
 ## 文件管理逻辑
 
-本软件工作目录是`/sdcard/Download/CategoricalGallery`
+本软件工作目录是`/sdcard/Download/.CategoricalGallery`（隐藏文件夹）
 
-照片存放的目录是`/sdcard/Download/CategoricalGallery/“工作区名称”/“相册名称”/单个照片文件`。
+本地工作区的目录是`/sdcard/Download/.CategoricalGallery/workspaces/“工作区名称”/`。
+
+在线工作区的目录是`/sdcard/Download/.CategoricalGallery/online_workspaces/“在线工作区名称”/`。
+
+本地工作区内，相册的目录是`/sdcard/Download/.CategoricalGallery/workspaces/“工作区名称”/“相册名称”/`。
+
+本地工作区内，单张照片存放的目录是`/sdcard/Download/.CategoricalGallery/workspaces/“工作区名称”/“相册名称”/单个照片文件`。
