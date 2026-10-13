@@ -4,8 +4,12 @@ import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,7 +33,7 @@ import java.util.List;
  * <p>
  * Flow:
  * <ol>
- *     <li>State 1: Select a system album from the list.</li>
+ *     <li>State 1: Select a system album from the list (with name search filter).</li>
  *     <li>State 2: Choose import mode (move / copy).</li>
  *     <li>State 3: Copy (and optionally delete original) photos in a background thread,
  *         updating a progress bar.</li>
@@ -56,6 +60,8 @@ public class ImportActivity extends AppCompatActivity implements SystemAlbumAdap
     private View stateImporting;
     private View stateComplete;
 
+    private EditText etSearchAlbum;
+    private ImageView btnClearSearch;
     private RecyclerView recyclerView;
     private TextView textEmpty;
     private Button btnNextStep;
@@ -98,9 +104,15 @@ public class ImportActivity extends AppCompatActivity implements SystemAlbumAdap
         stateImporting = findViewById(R.id.stateImporting);
         stateComplete = findViewById(R.id.stateComplete);
 
+        etSearchAlbum = findViewById(R.id.etSearchAlbum);
+        btnClearSearch = findViewById(R.id.btnClearSearch);
+
         recyclerView = findViewById(R.id.recyclerAlbums);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setHasFixedSize(false);
+
+        adapter = new SystemAlbumAdapter(this, systemAlbums, ImportActivity.this);
+        recyclerView.setAdapter(adapter);
 
         textEmpty = findViewById(R.id.textEmpty);
 
@@ -125,6 +137,38 @@ public class ImportActivity extends AppCompatActivity implements SystemAlbumAdap
             setResult(RESULT_OK);
             finish();
         });
+
+        // 搜索输入监听
+        etSearchAlbum.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {}
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String query = s == null ? "" : s.toString().trim();
+                btnClearSearch.setVisibility(query.isEmpty() ? View.GONE : View.VISIBLE);
+                performSearch(query);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {}
+        });
+
+        btnClearSearch.setOnClickListener(v -> etSearchAlbum.setText(""));
+    }
+
+    private void performSearch(String query) {
+        if (adapter == null) return;
+        int count = adapter.filter(query);
+        if (systemAlbums.isEmpty()) {
+            textEmpty.setText(R.string.empty_system_albums);
+            textEmpty.setVisibility(View.VISIBLE);
+        } else if (count == 0) {
+            textEmpty.setText(R.string.search_no_result);
+            textEmpty.setVisibility(View.VISIBLE);
+        } else {
+            textEmpty.setVisibility(View.GONE);
+        }
     }
 
     private void setState(int state) {
@@ -160,9 +204,9 @@ public class ImportActivity extends AppCompatActivity implements SystemAlbumAdap
             runOnUiThread(() -> {
                 systemAlbums.clear();
                 systemAlbums.addAll(albums);
-                adapter = new SystemAlbumAdapter(this, systemAlbums, ImportActivity.this);
-                recyclerView.setAdapter(adapter);
-                textEmpty.setVisibility(systemAlbums.isEmpty() ? View.VISIBLE : View.GONE);
+                adapter.setAlbums(systemAlbums);
+                String currentQuery = etSearchAlbum != null ? etSearchAlbum.getText().toString().trim() : "";
+                performSearch(currentQuery);
             });
         }).start();
     }

@@ -15,12 +15,14 @@ import com.bumptech.glide.Glide;
 import com.categorical.gallery.R;
 import com.categorical.gallery.model.SystemAlbum;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Adapter for displaying system photo albums in a RecyclerView.
  * Supports single-selection mode: tapping an item selects it and gives
  * visual feedback (border highlight + check mark overlay).
+ * Supports real-time search filtering by album name.
  */
 public class SystemAlbumAdapter extends RecyclerView.Adapter<SystemAlbumAdapter.AlbumViewHolder> {
 
@@ -32,16 +34,44 @@ public class SystemAlbumAdapter extends RecyclerView.Adapter<SystemAlbumAdapter.
     }
 
     private final Context context;
-    private final List<SystemAlbum> albums;
+    private final List<SystemAlbum> allAlbums = new ArrayList<>();
+    private final List<SystemAlbum> displayedAlbums = new ArrayList<>();
     private final OnAlbumSelectedListener listener;
 
-    /** Index of the currently selected album, -1 if none. */
-    private int selectedPosition = -1;
+    private SystemAlbum selectedAlbum = null;
 
     public SystemAlbumAdapter(Context context, List<SystemAlbum> albums, OnAlbumSelectedListener listener) {
         this.context = context;
-        this.albums = albums;
+        if (albums != null) {
+            this.allAlbums.addAll(albums);
+            this.displayedAlbums.addAll(albums);
+        }
         this.listener = listener;
+    }
+
+    public void setAlbums(List<SystemAlbum> albums) {
+        this.allAlbums.clear();
+        if (albums != null) {
+            this.allAlbums.addAll(albums);
+        }
+        filter("");
+    }
+
+    public int filter(String query) {
+        displayedAlbums.clear();
+        String q = query == null ? "" : query.trim().toLowerCase();
+        for (SystemAlbum album : allAlbums) {
+            if (q.isEmpty() || (album.getName() != null && album.getName().toLowerCase().contains(q))) {
+                displayedAlbums.add(album);
+            }
+        }
+        notifyDataSetChanged();
+        return displayedAlbums.size();
+    }
+
+    public void setSelectedAlbum(SystemAlbum album) {
+        this.selectedAlbum = album;
+        notifyDataSetChanged();
     }
 
     @NonNull
@@ -53,7 +83,7 @@ public class SystemAlbumAdapter extends RecyclerView.Adapter<SystemAlbumAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull AlbumViewHolder holder, int position) {
-        SystemAlbum album = albums.get(position);
+        SystemAlbum album = displayedAlbums.get(position);
 
         holder.textName.setText(album.getName());
         holder.textCount.setText(context.getString(R.string.photo_count_format, album.getPhotoCount()));
@@ -72,7 +102,7 @@ public class SystemAlbumAdapter extends RecyclerView.Adapter<SystemAlbumAdapter.
                     context.getResources().getColor(R.color.colorEmptyBg));
         }
 
-        boolean selected = position == selectedPosition;
+        boolean selected = isSameAlbum(album, selectedAlbum);
         holder.itemView.setSelected(selected);
         holder.imageCheck.setVisibility(selected ? View.VISIBLE : View.GONE);
 
@@ -80,34 +110,38 @@ public class SystemAlbumAdapter extends RecyclerView.Adapter<SystemAlbumAdapter.
             int pos = holder.getBindingAdapterPosition();
             if (pos == RecyclerView.NO_POSITION) return;
 
-            int previous = selectedPosition;
-            if (previous == pos) {
-                // Toggle off the current selection
-                selectedPosition = -1;
+            SystemAlbum clickedAlbum = displayedAlbums.get(pos);
+            if (isSameAlbum(clickedAlbum, selectedAlbum)) {
+                // Toggle off selection
+                selectedAlbum = null;
                 notifyItemChanged(pos);
                 if (listener != null) listener.onAlbumSelected(null);
             } else {
-                selectedPosition = pos;
-                if (previous >= 0) notifyItemChanged(previous);
-                notifyItemChanged(pos);
-                if (listener != null) listener.onAlbumSelected(albums.get(pos));
+                selectedAlbum = clickedAlbum;
+                notifyDataSetChanged();
+                if (listener != null) listener.onAlbumSelected(selectedAlbum);
             }
         });
     }
 
+    private boolean isSameAlbum(SystemAlbum a, SystemAlbum b) {
+        if (a == null || b == null) return false;
+        if (a.getId() != 0 && b.getId() != 0) {
+            return a.getId() == b.getId();
+        }
+        return a.getName() != null && a.getName().equals(b.getName());
+    }
+
     @Override
     public int getItemCount() {
-        return albums == null ? 0 : albums.size();
+        return displayedAlbums.size();
     }
 
     /**
      * @return the currently selected album, or null if none selected.
      */
     public SystemAlbum getSelectedAlbum() {
-        if (selectedPosition >= 0 && selectedPosition < getItemCount()) {
-            return albums.get(selectedPosition);
-        }
-        return null;
+        return selectedAlbum;
     }
 
     static class AlbumViewHolder extends RecyclerView.ViewHolder {
